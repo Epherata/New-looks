@@ -12,7 +12,11 @@
     body {font-family:'Montserrat', sans-serif; background:#fff8f0; color:#111;}
     a {text-decoration:none; color:inherit;}
     img, iframe {display:block; width:100%;}
- 
+ /* Smooth scroll for section links */
+html {
+  scroll-behavior: smooth;
+}
+
     /* ==== HEADER ==== */
     header {
       position: fixed;
@@ -24,9 +28,31 @@
       padding:20px 50px;
       z-index:1000;
       transition: background 0.5s, padding 0.3s;
+      
     }
+    header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  z-index: 1000;
+  transition: background 0.5s, padding 0.3s;
+  background: rgba(255, 255, 255, 0.2); /* light transparent background */
+  backdrop-filter: blur(8px); /* subtle blur effect */
+}
     header.scrolled {background: rgba(255,248,240,0.95); backdrop-filter: blur(10px); padding:15px 50px;}
-    .logo {font-family:'Playfair Display', serif; font-size:2rem; font-weight:700; color:#d4af37;}
+    .logo {font-family:'Playfair Display', serif; font-size:2rem; font-weight:700; color:#d4af37;gap: 10px;}
+    .logo img {
+   height: 60px;        /* adjust size */
+  width: 60px;         /* make it a square */
+  border-radius: 50%;  /* makes it a circle */
+  object-fit: cover;   /* ensures it fills the circle nicely */
+  
+}
+
     nav a {margin-left:25px; font-weight:600; transition:0.3s;}
     nav a:hover {color:#d4af37; text-shadow:0 0 10px rgba(212,175,55,0.7);}
 
@@ -79,6 +105,68 @@
     .hair-card img {width:100%; display:block;}
     .hair-card h4 {padding:15px; font-weight:600; color:#111;}
     .hair-card p {padding:0 15px 15px; font-size:0.95rem; color:#333;}
+
+    /* ==== HUMAN HAIR GRID ==== */
+.hair-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 30px;
+}
+
+.hair-card {
+  background:#fff8f0;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+  overflow: hidden; /* ensures image doesn't break layout normally */
+  position: relative;
+}
+.hair-card:hover img {
+  opacity: 0;   /* hide image */
+}
+.hair-card:hover video {
+  opacity: 1;   /* show video */
+  pointer-events: auto;
+}
+
+.hair-card:hover {
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Make all images equal height */
+
+.hair-card img,
+.hair-card video {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.4s ease;
+}
+
+.hair-card video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;   /* hidden initially */
+  pointer-events: none;
+}
+
+.hair-card h4 {
+  padding:15px;
+  font-weight:600;
+  color:#111;
+}
+
+.hair-card p {
+  padding:0 15px 15px;
+  font-size:0.95rem;
+  color:#333;
+}
+
 
     /* ==== GALLERY GRID ==== */
     /* gallery css*/
@@ -182,6 +270,21 @@
     #booking button {background:#d4af37; color:#111; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; transition:0.3s;}
     #booking button:hover {background:#c69c2f; transform:scale(1.05);}
 
+/* ==== Social Icons Hover Effect ==== */
+.contact-details .social-icons a {
+  font-size: 1.8rem;
+  color: #111111;
+  transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+}
+
+.contact-details .social-icons a:hover {
+  color: #d4af37; /* gold */
+  transform: scale(1.3) rotate(-5deg); /* zoom + tilt */
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); /* glowing gold */
+}
+
+
+
    /* contact css*/
 .contact-section {
   display: flex;
@@ -238,6 +341,16 @@
   background-color: #b38e2e;
 }
 
+.contact-form input[type="date"] {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+}
+
+
 .contact-details p {
   font-size: 1.05rem;
   margin: 0.8rem 0;
@@ -265,6 +378,31 @@
   color: #d4af37;
 }
 
+.copy-text {
+  user-select: text;   /* allow selection */
+  cursor: text;        /* text cursor */
+}
+
+#copy-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #d4af37; /* gold */
+  color: black;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 9999;
+}
+#copy-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
     /* ==== FOOTER ==== */
     footer {background:#111; color:#fff; text-align:center; padding:40px 20px;}
     footer .social a {margin:0 10px; font-size:1.5rem; color:#fff; transition:0.3s;}
@@ -278,13 +416,17 @@
 
   <!-- HEADER -->
   <header>
-    <div class="logo">New Looks</div>
+    <div class="logo">
+    <img src="./assets/Logo.jpg" alt="New Looks Logo">
+   
+    </div>
     <nav>
       <a href="#home">Home</a>
       <a href="#services">Services</a>
       <a href="#hair">Human Hair</a>
       <a href="#gallery">Gallery</a>
       <a href="#booking">Booking</a>
+      <a href="#booking">Contact</a>
       
     </nav>
   </header>
@@ -294,7 +436,7 @@
     <div class="content">
       <h1>New Looks Hair Salon</h1>
       <p>Luxury human hair & premium salon services</p>
-      <button class="btn">Book Now</button>
+      <a href="#booking" class="btn" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Book Now</a>
     </div>
   </section>
 
@@ -354,18 +496,45 @@
     <h2>Human Hair Collection</h2>
     <div class="hair-grid">
       <div class="hair-card">
-        <img src="https://images.unsplash.com/photo-1611030916536-36f48fc45dbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600" alt="Hair 1">
-        <h4>Virgin Hair Bundle</h4>
+        <img src="./assets/20'.jpg" alt="Hair 1">
+        <video src="./assets/20.mp4" muted loop></video>
+        <h4>20' Natural Wavy Hair for $150</h4>
         <p>Premium quality, soft and natural look.</p>
       </div>
       <div class="hair-card">
-        <img src="https://images.unsplash.com/photo-1620085369382-1c0b8d214ddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600" alt="Hair 2">
-        <h4>Curly Hair Bundle</h4>
-        <p>Perfect for voluminous curls and styles.</p>
+        <img src="./assets/22'.jpg" alt="Hair 2">
+        <video src="./assets/20' wave.mp4" muted loop></video>
+        <h4>22' Natural Wavy Hair for $175</h4>
+        <p>Perfect for voluminous wave and styles.</p>
       </div>
       <div class="hair-card">
-        <img src="https://images.unsplash.com/photo-1612831455542-8d9db4b6f3f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600" alt="Hair 3">
-        <h4>Straight Hair Bundle</h4>
+        <img src="./assets/24'.jpg" alt="Hair 3">
+        <video src="./assets/24.mp4" muted loop></video>
+        <h4>24' Natural Wavy Hair for $200</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/26'.jpg" alt="Hair 3">
+        <video src="./assets/26' wave.mp4" muted loop></video>
+        <h4>26' Natural Wavy Hair for $250</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/human hair1.jpg" alt="Hair 3">
+        <video src="./assets/stock.mp4" muted loop></video>
+        <h4>Stockes</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/human hair2.jpg" alt="Hair 3">
+        <video src="./assets/stock.mp4" muted loop></video>
+        <h4>Stockes</h4>
+        <p>Sleek, shiny, and natural straight hairs.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/human hair3.jpg" alt="Hair 3">
+        <video src="./assets/stock.mp4" muted loop></video>
+        <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
       </div>
     </div>
@@ -375,7 +544,7 @@
   <section id="gallery">
     <h2>Gallery</h2>
    <section class="gallery-section" data-aos="fade-up">
-    <h3>Our Work</h3>
+    <h3 class="video-heading">Our Work</h3>
     <p class="gallery-intro">Take a look at some of our favorite styles, moments, and transformations.</p>
 
    
@@ -421,39 +590,40 @@
 
   </section>
 
-  <!-- BOOKING -->
-  <section id="booking">
-    <h2 style="text-align: center;">Book Your Appointment</h2>
-   
-
+<!-- BOOKING -->
+<section id="booking">
+  <h2 style="text-align: center;">Book Your Appointment</h2>
+ 
   <section class="contact-section">
     <div class="contact-form">
-     
-      <form action="#" method="POST">
-        <input type="text" placeholder="Full Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <input type="tel" placeholder="Phone Number" required>
-        <textarea rows="5" placeholder="Your Message" required></textarea>
+      <form id="bookingForm">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+       
+        <textarea rows="5" name="message" placeholder="Your Message" required></textarea>
         <button type="submit">Book Now</button>
       </form>
-    </div><hr style="margin: 20px 0; border: none;"><hr style="margin: 20px 0; border: none;"><hr style="margin: 20px 0; border: none;"><hr style="margin: 20px 0; border: none;">
+    </div><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"> <hr style="border: none;">
 
     <div class="contact-details">
       <h2>Contact Info</h2>
-       <p><i class="fas fa-phone"></i> +202-893-0066 / +301-202-5993</p>
-    <p><i class="fas fa-envelope"></i> newlook@salon.com</p>
-    <p ><i class="fas fa-map-marker-alt"></i> 13824 old Columbia pike Silver Spring, Maryland</p>
-  
-      <div class="social-icons">
-        <a href="https://www.instagram.com/newlookbeautysalon1216?igsh=YjR2YXlqN3JwMDIw" target="_blank"><i class="fab fa-instagram"></i></a>
-  <a href="https://www.tiktok.com/@newlook2015?_t=ZM-8xnjFRUDvz4" target="_blank"><i class="fab fa-tiktok"></i></a>
-  <a href="https://youtube.com/@newlookbeautysalondmv?si=XoZqq-qhODd_-6mP" target="_blank"><i class="fab fa-youtube"></i></a>
+      <p><i class="fas fa-phone"></i> <span class="copy-text">+202-893-0066 / +301-202-5993</span></p>
+      <p><i class="fas fa-envelope"></i> <span class="copy-text">newlook@salon.com</span></p>
+      <p><i class="fas fa-map-marker-alt"></i> <span class="copy-text">13824 old Columbia pike Silver Spring, Maryland</span></p>
 
+      <div class="social-icons">
+        <a href="https://www.instagram.com/newlookbeautysalon1216" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@newlook2015" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="https://youtube.com/@newlookbeautysalondmv" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/share/1GJopNkbd3/" target="_blank"><i class="fab fa-facebook"></i></a>
       </div>
     </div>
   </section>
+</section>
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
 
-  </section>
 
   <!-- CONTACT / FOOTER -->
   <footer id="contact">
@@ -462,7 +632,7 @@
       <a href="https://www.instagram.com/newlookbeautysalon1216?igsh=YjR2YXlqN3JwMDIw" target="_blank"><i class="fab fa-tiktok"></i></a>
       <a href="https://www.instagram.com/newlookbeautysalon1216?igsh=YjR2YXlqN3JwMDIw" target="_blank"><i class="fab fa-instagram"></i></a>
       <a href="https://youtube.com/@newlookbeautysalondmv?si=3Wc3wExrGk2Bzwzu" target="_blank"><i class="fab fa-youtube"></i></a>
-      <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.facebook.com/share/1GJopNkbd3/" target="_blank"><i class="fab fa-facebook"></i></a>
     </div>
     <p>&copy; 2025 New Looks Hair Salon</p>
   </footer>
@@ -537,6 +707,61 @@
     }
   });
 </script>
+
+ 
+<div id="copy-toast">Copied!</div>
+<script>
+  document.querySelectorAll('.copy-text').forEach(item => {
+    item.addEventListener('click', () => {
+      navigator.clipboard.writeText(item.textContent.trim());
+
+      const toast = document.getElementById('copy-toast');
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000); // disappears after 2s
+    });
+  });
+</script>
+<!-- Calendly popup script -->
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
+
+<script>
+  const form = document.getElementById("bookingForm");
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = encodeURIComponent(form.name.value);
+    const email = encodeURIComponent(form.email.value);
+    const phone = encodeURIComponent(form.phone.value);
+    const message = encodeURIComponent(form.message.value);
+   
+
+    // Prepare the message with new line
+    const a1Message = `Phone: ${phone}%0AMessage: ${message}`;
+
+    // Open Calendly popup
+    Calendly.initPopupWidget({
+      url: `https://calendly.com/euphrates483/new-meeting?name=${name}&email=${email}&a1=${a1Message}`
+    });
+
+    return false; // prevent actual form submission
+  });
+</script>
+
+<script>
+  document.querySelectorAll(".hair-card").forEach(card => {
+    const video = card.querySelector("video");
+    if (video) {
+      card.addEventListener("mouseenter", () => video.play());
+      card.addEventListener("mouseleave", () => video.pause());
+    }
+  });
+</script>
+
+
 
 </body>
 </html>
