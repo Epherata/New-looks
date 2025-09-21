@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Looks | 22' Straight Hair</title>
+  <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script>
+  <style>
+    /* ==== RESET ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: #111;
+    }
+
+    /* ==== HEADER ==== */
+    header {
+      width: 100%;
+      padding: 20px 10%;
+      display: flex;
+      align-items: center;
+      background: #000;
+      position: relative;
+    }
+
+    header .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto;
+      display: block;
+    }
+
+    header .back-home {
+      position: absolute;
+      left: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      background: #b89146;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    header .back-home:hover {
+      background: #a27a34;
+    }
+
+    /* ==== PRODUCT DETAIL SECTION ==== */
+    .product-detail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 80px 10%;
+      background: #fff8f0;
+    }
+
+    .product-detail img {
+      width: 350px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-detail div {
+      max-width: 500px;
+    }
+
+    .product-detail h2 {
+      font-size: 2rem;
+      color: #b89146;
+      margin-bottom: 10px;
+    }
+
+    .product-detail p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .product-detail h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    .paypal-btn {
+      background: #ffc439;
+      color: #111;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .paypal-btn:hover {
+      background: #ffb347;
+      transform: scale(1.05);
+    }
+
+    /* ==== RELATED PRODUCTS ==== */
+    .related-products {
+      padding: 80px 10%;
+      background: #fdfdfd;
+      text-align: center;
+    }
+
+    .related-products h3 {
+      font-size: 1.8rem;
+      margin-bottom: 40px;
+      color: #b89146;
+    }
+
+    .related-products .hair-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+    }
+
+    .related-products .hair-card {
+      background: #fff8f0;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .related-products .hair-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .related-products .hair-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .related-products .hair-card h4 {
+      font-size: 1.1rem;
+      padding: 15px;
+      color: #000;
+    }
+
+    .related-products .hair-card a {
+      display: block;
+      background: #b89146;
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 0 0 15px 15px;
+      transition: background 0.3s;
+    }
+
+    .related-products .hair-card a:hover {
+      background: #a27a34;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="back-home">⬅ Back to Home</a>
+    <img src="./assets/logo.JPG" alt="New Looks Logo" class="logo">
+  </header>
+
+  <!-- MAIN PRODUCT -->
+  <main>
+    <section class="product-detail">
+      <img src="./assets/22'.jpg" alt="22' Straight Hair">
+      <div>
+        <h2>22' Straight Hair</h2>
+        <p>Sleek, smooth, and premium quality straight human hair. Perfect for elegant looks.</p>
+        <h3>$175.00</h3>
+
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="business" value="youremail@paypal.com">
+          <input type="hidden" name="item_name" value="22' Straight Hair">
+          <input type="hidden" name="amount" value="175.00">
+          <input type="hidden" name="currency_code" value="USD">
+          <button type="submit" class="paypal-btn"><i class="fab fa-paypal"></i> Buy with PayPal</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- RELATED PRODUCTS -->
+    <section class="related-products">
+      <h3>Other Human Hair Products</h3>
+      <div class="hair-grid">
+        <div class="hair-card">
+          <img src="./assets/20'.jpg" alt="20' Natural Wavy Hair">
+          <h4>20' Natural Wavy Hair</h4>
+          <a href="20.html">View Product</a>
+        </div>
+        <div class="hair-card">
+          <img src="./assets/24'.jpg" alt="24' Body Wave">
+          <h4>24' Body Wave</h4>
+          <a href="24'.html">View Product</a>
+        </div>
+        <div class="hair-card">
+          <img src="./assets/26'.jpg" alt="26' Deep Curl">
+          <h4>26' Deep Curl</h4>
+          <a href="26'.html">View Product</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
