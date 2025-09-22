@@ -439,6 +439,26 @@ html {
     footer .social a:hover {color:#d4af37; transform:scale(1.2);}
 
     /* ==== MEDIA ==== */
+    /* Mobile Responsive */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header .logo {
+    margin-bottom: 10px;
+  }
+    header .logo img {
+    width: 70px;   /* smaller logo size on mobile */
+    height: auto;   /* keeps proportions */
+  }
+
+  header nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
     @media(max-width:768px){#home h1{font-size:3rem;} section{padding:70px 20px;}}
   </style>
 </head>
@@ -527,7 +547,7 @@ html {
     <div class="hair-grid">
       <div class="hair-card">
         <img src="./assets/20.jpg" alt="Hair 1">
-        <video src="./assets/20.mp4" muted loop></video>
+        <video src="./assets/20.mp4" muted loop autoplay></video>
         <h4>20' Natural Wavy Hair for $150</h4>
         <p>Premium quality, soft and natural look.</p>
         <a href="20.html" class="buy-btn">
@@ -539,7 +559,7 @@ html {
       </div>
       <div class="hair-card">
         <img src="./assets/22.jpg" alt="Hair 2">
-        <video src="./assets/20 wave.mp4" muted loop></video>
+        <video src="./assets/20 wave.mp4" muted loop autoplay></video>
         <h4>22' Natural Wavy Hair for $175</h4>
         <p>Perfect for voluminous wave and styles.</p>
         <a href="22.html" class="buy-btn">
@@ -549,7 +569,7 @@ html {
       </div>
       <div class="hair-card">
         <img src="./assets/24.jpg" alt="Hair 3">
-        <video src="./assets/24.mp4" muted loop></video>
+        <video src="./assets/24.mp4" muted loop autoplay></video>
         <h4>24' Natural Wavy Hair for $200</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
         <a href="24.html" class="buy-btn">
@@ -558,7 +578,7 @@ html {
       </div>
         <div class="hair-card">
         <img src="./assets/26.jpg" alt="Hair 3">
-        <video src="./assets/26 wave.mp4" muted loop></video>
+        <video src="./assets/26 wave.mp4" muted loop autoplay></video>
         <h4>26' Natural Wavy Hair for $250</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
         <a href="26.html" class="buy-btn">
@@ -567,19 +587,19 @@ html {
       </div>
         <div class="hair-card">
         <img src="./assets/human hair1.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop></video>
+        <video src="./assets/stock.mp4" muted loop autoplay></video>
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
       </div>
         <div class="hair-card">
         <img src="./assets/human hair2.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop></video>
+        <video src="./assets/stock.mp4" muted loop autoplay></video>
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hairs.</p>
       </div>
         <div class="hair-card">
         <img src="./assets/human hair3.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop></video>
+        <video src="./assets/stock.mp4" muted loop autoplay></video>
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
       </div>
