@@ -4,15 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Looks | 24' Body Wave</title>
-  <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script>
+ <script src="https://kit.fontawesome.com/abc123xyz.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <style>
     * {margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
     body {background:#fff;color:#111;}
+
+    /* ==== HEADER ==== */
     header {width:100%;padding:20px 10%;display:flex;align-items:center;background:#000;position:relative;}
     header .logo {width:70px;height:70px;border-radius:50%;object-fit:cover;margin:0 auto;display:block;}
     header .back-home {position:absolute;left:20px;color:#fff;text-decoration:none;font-size:1rem;background:#b89146;padding:8px 16px;border-radius:8px;transition:background 0.3s;}
     header .back-home:hover {background:#a27a34;}
-    .product-detail {display:flex;align-items:center;justify-content:center;gap:40px;padding:80px 10%;background:#fff8f0;}
+
+    /* ==== PRODUCT SECTION ==== */
+    .product-detail {display:flex;align-items:center;justify-content:center;gap:40px;padding:80px 10%;background:#fff8f0;flex-wrap:wrap;}
     .product-detail img {width:350px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);}
     .product-detail div {max-width:500px;}
     .product-detail h2 {font-size:2rem;color:#b89146;margin-bottom:10px;}
@@ -20,6 +26,8 @@
     .product-detail h3 {font-size:1.5rem;margin-bottom:20px;color:#000;}
     .paypal-btn {background:#ffc439;color:#111;border:none;padding:12px 25px;font-size:1rem;border-radius:10px;cursor:pointer;transition:all 0.3s ease;}
     .paypal-btn:hover {background:#ffb347;transform:scale(1.05);}
+
+    /* ==== RELATED PRODUCTS ==== */
     .related-products {padding:80px 10%;background:#fdfdfd;text-align:center;}
     .related-products h3 {font-size:1.8rem;margin-bottom:40px;color:#b89146;}
     .related-products .hair-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;}
@@ -29,13 +37,21 @@
     .related-products .hair-card h4 {font-size:1.1rem;padding:15px;color:#000;}
     .related-products .hair-card a {display:block;background:#b89146;color:#fff;padding:10px;text-decoration:none;font-weight:bold;border-radius:0 0 15px 15px;transition:background 0.3s;}
     .related-products .hair-card a:hover {background:#a27a34;}
+
+    /* ==== FOOTER (same as homepage) ==== */
+    footer {background:#111; color:#fff; text-align:center; padding:20px 20px; margin-top:40px;}
+    footer .social {margin:20px 0;}
+    footer .social a {margin:0 12px; font-size:1.8rem; color:#fff; transition:0.3s;}
+    footer .social a:hover {color:#d4af37; transform:scale(1.2);}
+    footer p {margin-top:10px; font-size:0.9rem; color:#aaa;}
   </style>
 </head>
 <body>
   <header>
     <a href="index.html" class="back-home">⬅ Back to Home</a>
-    <img src="./assets/Logo.jpg" alt="New Looks Logo" class="logo">
+    <img src="./assets/logo.jpg" alt="New Looks Logo" class="logo">
   </header>
+
   <main>
     <section class="product-detail">
       <img src="./assets/24.jpg" alt="24' Body Wave">
@@ -53,6 +69,7 @@
         </form>
       </div>
     </section>
+
     <section class="related-products">
       <h3>Other Human Hair Products</h3>
       <div class="hair-grid">
@@ -62,5 +79,17 @@
       </div>
     </section>
   </main>
+
+  <!-- CONTACT / FOOTER -->
+  <footer id="contact">
+    <p>Follow us on</p>
+    <div class="social">
+      <a href="https://www.tiktok.com/@newlook2015" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/newlookbeautysalon1216?igsh=YjR2YXlqN3JwMDIw" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://youtube.com/@newlookbeautysalondmv?si=3Wc3wExrGk2Bzwzu" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.facebook.com/share/1GJopNkbd3/" target="_blank"><i class="fab fa-facebook"></i></a>
+    </div>
+    <p>&copy; 2025 New Looks Hair Salon | All Rights Reserved</p>
+  </footer>
 </body>
 </html>
