@@ -44,6 +44,87 @@
     footer .social a {margin:0 12px; font-size:1.8rem; color:#fff; transition:0.3s;}
     footer .social a:hover {color:#d4af37; transform:scale(1.2);}
     footer p {margin-top:10px; font-size:0.9rem; color:#aaa;}
+    /* ==== MOBILE RESPONSIVE ==== */
+@media (max-width: 1024px) {
+  .product-detail {
+    flex-direction: column;
+    padding: 50px 5%;
+    gap: 30px;
+  }
+
+  .product-detail img {
+    width: 90%;
+    max-width: 350px;
+  }
+
+  .product-detail div {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .paypal-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 15px 5%;
+  }
+
+  header .back-home {
+    left: 10px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .product-detail h2 {
+    font-size: 1.7rem;
+  }
+
+  .product-detail h3 {
+    font-size: 1.3rem;
+  }
+
+  .related-products h3 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .related-products .hair-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+  }
+
+  .related-products .hair-card img {
+    height: 180px;
+  }
+
+  .related-products .hair-card h4 {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header .logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .paypal-btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+
+  .related-products .hair-card img {
+    height: 150px;
+  }
+
+  .related-products .hair-card h4 {
+    font-size: 0.85rem;
+  }
+}
+
   </style>
 </head>
 <body>

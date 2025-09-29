@@ -54,6 +54,17 @@ html {
   
 }
 
+
+/* Hamburger icon (hidden on desktop) */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: #FFD700;
+ cursor: pointer;
+  margin-left: auto;
+  z-index: 1001; /* above menu */
+}
+
     nav a {margin-left:25px; font-weight:600; transition:0.3s;}
     nav a:hover {color:#d4af37; text-shadow:0 0 10px rgba(212,175,55,0.7);}
 
@@ -272,6 +283,40 @@ html {
     #booking button {background:#d4af37; color:#111; padding:15px; border:none; border-radius:30px; font-weight:600; cursor:pointer; transition:0.3s;}
     #booking button:hover {background:#c69c2f; transform:scale(1.05);}
 
+
+    /* ==== RADIO BUTTON STYLING ==== */
+.services-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0 20px 0;
+}
+
+.services-options label {
+  position: relative;
+  display: inline-block;
+  border: 2px solid #b89146;
+  border-radius: 30px; /* oval shape */
+  padding: 10px 25px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  color: #b89146; /* text color */
+  text-align: center;
+}
+
+.services-options input[type="radio"] {
+  display: none;
+}
+
+.services-options input[type="radio"]:checked + label {
+  background-color: #b89146;
+  color: #fff;
+  border-color: #b89146;
+}
+
 /* ==== Social Icons Hover Effect ==== */
 .contact-details .social-icons a {
   font-size: 1.8rem;
@@ -461,6 +506,94 @@ html {
   }
 }
     @media(max-width:768px){#home h1{font-size:3rem;} section{padding:70px 20px;}}
+  
+  /* MOBILE RESPONSIVE RADIO BUTTONS */
+@media (max-width: 768px) {
+
+   header {
+    flex-wrap: wrap;
+  }
+
+
+  /* Hide menu by default */
+
+   header nav {
+     display: none;
+    flex-direction: column;
+    width: 50%;
+    background: none; /* cream */
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+
+  header nav a {
+    padding: 1rem;
+    text-align: center;
+    color: #000; /* black text */
+    border-top: 1px solid #ddd;
+    transition: background 0.3s, color 0.3s;
+  }
+   header nav a:hover,
+  header nav a:active {
+    color: #FFD700; 
+  }
+
+  /* Show hamburger */
+  .menu-toggle {
+    display: block;
+  }
+
+  /* When active, show the dropdown */
+  header nav.showing {
+    display: flex;
+  }
+
+
+  .services-options {
+    flex-direction: column; /* stack vertically on small screens */
+    gap: 10px;
+    align-items: center;
+  }
+
+  .services-options label {
+    padding: 12px 20px; /* slightly smaller padding to fit mobile */
+    font-size: 0.9rem; /* adjust font size for smaller screens */
+    width: 80%; /* make the oval stretch a bit on mobile */
+  }
+}
+
+/* Buttons hover animation */
+.btn {
+  transition: all 0.4s ease;
+}
+.btn:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Hair Cards hover zoom */
+.hair-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.hair-card:hover {
+  transform: scale(1.08) translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+/* Gallery items hover tilt + scale */
+.gallery-item {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.gallery-item:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+
+
+
   </style>
 </head>
 <body>
@@ -471,24 +604,28 @@ html {
     <img src="./assets/log.jpg" alt="New Looks Logo">
    
     </div>
-    <nav>
+    
+    <!-- Hamburger icon -->
+  <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    <nav >
       <a href="#home">Home</a>
       <a href="#services">Services</a>
       <a href="#hair">Human Hair</a>
       <a href="#gallery">Gallery</a>
       <a href="#booking">Booking</a>
-      <a href="#booking">Contact</a>
+      <a href="#contactt">Contact</a>
       
     </nav>
   </header>
 
   <!-- HOME -->
-  <section id="home">
+  <section id="home" data-aos="fade-up">
     <div class="content">
-      <h1>New Looks Hair Salon</h1>
-      <p>Luxury human hair & premium salon services</p>
-      <a href="#booking" class="btn" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Book Now</a>
+      <h1 data-aos="zoom-in" data-aos-delay="200">New Looks Hair Salon</h1>
+      <p data-aos="fade-up" data-aos-delay="400">Luxury human hair & premium salon services</p>
+      <a href="#booking" data-aos="fade-up" data-aos-delay="600" class="btn" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Book Now</a>
     </div>
+    
   </section>
 
 
@@ -496,26 +633,26 @@ html {
 
 
   <!-- SERVICES -->
-  <section id="services">
-    <h2>Our Services</h2>
+  <section id="services" data-aos="fade-up">
+    <h2 data-aos="fade-down">Our Services</h2>
     <div class="service-cards">
         <div class="service-card">
   <h3><i class="fas fa-cut" data-aos="fade-down"></i> Hair Styling</h3>
   <p>Creative styles and treatments to keep your hair looking fabulous.</p>
 </div>
-      <div class="service-card">
+      <div class="service-card"  data-aos="fade-up" data-aos-delay="100">
         <h3><i class="fas fa-scissors" data-aos="fade-down"></i> Luxury Haircut</h3>
       <p>Tailored cuts that highlight your personality and style.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card"  data-aos="fade-up" data-aos-delay="200">
   <h3><i class="fas fa-paint-brush" data-aos="fade-down"></i> Nail Services</h3>
   <p>Manicure and pedicure services with luxurious finishes.</p>
 </div>
-      <div class="service-card">
+      <div class="service-card"  data-aos="fade-up" data-aos-delay="300">
        <h3><i class="fas fa-paint-brush" data-aos="fade-down"></i> Hair Coloring</h3>
       <p>From natural shades to bold hues — customized color for every client.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card"  data-aos="fade-up" data-aos-delay="400">
         <h3><i class="fas fa-braille" data-aos="fade-down"></i> Braiding</h3>
       <p>Choose from our range of stunning, elegant braid styles.</p>
       </div>
@@ -548,7 +685,10 @@ html {
     <div class="hair-grid">
       <div class="hair-card">
         <img src="./assets/20.jpg" alt="Hair 1">
-        <video src="./assets/20.mp4" muted loop autoplay></video>
+        <video autoplay muted loop playsinline poster="./assets/20.jpg">
+          <source src="./assets/20.mp4">
+        </video>
+       
         <h4>20' Natural Wavy Hair for $150</h4>
         <p>Premium quality, soft and natural look.</p>
         <a href="20.html" class="buy-btn">
@@ -560,7 +700,10 @@ html {
       </div>
       <div class="hair-card">
         <img src="./assets/22.jpg" alt="Hair 2">
-        <video src="./assets/20 wave.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/22.jpg">
+          <source src="./assets/20 wave.mp4">
+        </video>
+       
         <h4>22' Natural Wavy Hair for $175</h4>
         <p>Perfect for voluminous wave and styles.</p>
         <a href="22.html" class="buy-btn">
@@ -570,7 +713,10 @@ html {
       </div>
       <div class="hair-card">
         <img src="./assets/24.jpg" alt="Hair 3">
-        <video src="./assets/24.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/24.jpg">
+          <source src="./assets/24.mp4">
+        </video>
+        
         <h4>24' Natural Wavy Hair for $200</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
         <a href="24.html" class="buy-btn">
@@ -579,7 +725,10 @@ html {
       </div>
         <div class="hair-card">
         <img src="./assets/26.jpg" alt="Hair 3">
-        <video src="./assets/26 wave.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/26.jpg">
+          <source src="./assets/26 wave.mp4">
+        </video>
+       
         <h4>26' Natural Wavy Hair for $250</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
         <a href="26.html" class="buy-btn">
@@ -588,19 +737,28 @@ html {
       </div>
         <div class="hair-card">
         <img src="./assets/human hair1.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/human hair1.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
       </div>
         <div class="hair-card">
         <img src="./assets/human hair2.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/human hair2.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hairs.</p>
       </div>
         <div class="hair-card">
         <img src="./assets/human hair3.jpg" alt="Hair 3">
-        <video src="./assets/stock.mp4" muted loop autoplay></video>
+         <video autoplay muted loop playsinline poster="./assets/human hair3.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
         <h4>Stockes</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
       </div>
@@ -667,14 +825,39 @@ html {
         <input type="text" name="name" placeholder="Full Name" required />
         <input type="email" name="email" placeholder="Your Email" required />
         <input type="tel" name="phone" placeholder="Phone Number" required />
+        <h3>Select Service</h3>
+   <div class="services-options">
+
+  <input type="radio" id="service1" name="service" value="Hair Styling">
+  <label for="service1">Hair Styling</label>
+  
+    <input type="radio"id="service2" name="service" value="Braiding">
+    <label for="service2">Braiding</label>
+
+ 
+  <input type="radio" id="service3" name="service" value="Hair Coloring">
+  <label for="service3">Hair Coloring</label>
+
+    <input type="radio" id="service4" name="service" value="Wig Installation">
+    <label for="service4">Wig Installation</label>
+ 
+
+    <input type="radio" id="service5" name="service" value="Treatment">
+    <label for="service5">Treatment</label>
+
+  <input type="radio" id="service6" name="service" value="Nail Services">
+  <label for="service6">Nail Services</label>
+</div>
+
        
         <textarea rows="5" name="message" placeholder="Your Message" required></textarea>
         <button type="submit">Book Now</button>
       </form>
+      
     </div><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"> <hr style="border: none;">
-
+<section id="contactt">
     <div class="contact-details">
-      <h2>Contact Info</h2>
+      <h2 >Contact Info</h2>
       <p><i class="fas fa-phone"></i> <span class="copy-text">+202-893-0066 / +301-202-5993</span></p>
       <p><i class="fas fa-envelope"></i> <span class="copy-text">newlook@salon.com</span></p>
       <p><i class="fas fa-map-marker-alt"></i> <span class="copy-text">13824 old Columbia pike Silver Spring, Maryland</span></p>
@@ -687,6 +870,7 @@ html {
       </div>
     </div>
   </section>
+</section>
 </section>
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
@@ -828,6 +1012,32 @@ html {
   });
 </script>
 
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('header nav');
+
+  toggle.addEventListener('click', () => {
+    navMenu.classList.toggle('showing');
+    toggle.innerHTML = navMenu.classList.contains('showing')
+      ? '<i class="fas fa-times"></i>'  // show X
+      : '<i class="fas fa-bars"></i>';  // show hamburger
+  });
+
+  // Close menu when clicking a link
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('showing');
+      toggle.innerHTML = '<i class="fas fa-bars"></i>';
+    });
+  });
+</script>
 
 
 </body>
