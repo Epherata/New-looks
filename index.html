@@ -476,6 +476,50 @@ html {
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
+.custom-alert {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-box {
+  background: #b89146;
+  color: white;
+  padding: 25px 35px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-box button {
+  background: white;
+  color: #b89146;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alert-box button:hover {
+  background: #f5f5f5;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 
 
 
@@ -742,7 +786,7 @@ html {
           <source src="./assets/22curly.mp4">
         </video>
        
-        <h4>22' Natural curly Hair for $250</h4>
+        <h4>22' Natural curly Hair for $175</h4>
         <p>Full, defined curls with a soft, voluminous texture. Perfect for a livel,  effortlessly stylish look.</p>
         <a href="22curly.html" class="buy-btn">
          <i class="fas fa-shopping-cart"></i> Buy Now
@@ -755,7 +799,7 @@ html {
           <source src="./assets/24curly.mp4">
         </video>
        
-        <h4>24' Natural curly Hair for $250</h4>
+        <h4>24' Natural curly Hair for $200</h4>
         <p>Full, defined curls with a soft, voluminous texture. Perfect for a lively, effortlessly stylish look.</p>
         <a href="24curly.html" class="buy-btn">
          <i class="fas fa-shopping-cart"></i> Buy Now
@@ -878,9 +922,16 @@ html {
 </div>
 
        
-        <textarea rows="5" name="message" placeholder="Your Message" required></textarea>
+        <textarea rows="5" name="message" placeholder="Your Message"></textarea>
         <button type="submit">Book Now</button>
       </form>
+      <!-- Custom Alert Popup -->
+<div id="customAlert" class="custom-alert">
+  <div class="alert-box">
+    <p id="alertMessage">Please select a service before booking.</p>
+    <button id="alertOk">OK</button>
+  </div>
+</div>
       
     </div><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"><hr style="border: none;"> <hr style="border: none;">
 <section id="contactt">
@@ -1012,23 +1063,68 @@ html {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const name = encodeURIComponent(form.name.value);
-    const email = encodeURIComponent(form.email.value);
-    const phone = encodeURIComponent(form.phone.value);
-    const message = encodeURIComponent(form.message.value);
-   
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const phone = form.phone.value.trim();
+    const message = form.message.value.trim();
+    const service = form.querySelector('input[name="service"]:checked');
 
-    // Prepare the message with new line
-    const a1Message = `Phone: ${phone}%0AMessage: ${message}`;
+    // Custom alert function
+    function showAlert(msg) {
+      const alertBox = document.createElement("div");
+      alertBox.style.position = "fixed";
+      alertBox.style.top = "50%";
+      alertBox.style.left = "50%";
+      alertBox.style.transform = "translate(-50%, -50%)";
+      alertBox.style.background = " #b89146";
+      alertBox.style.padding = "20px 30px";
+      alertBox.style.borderRadius = "12px";
+      alertBox.style.boxShadow = "0 0 20px rgba(0,0,0,0.3)";
+      alertBox.style.textAlign = "center";
+      alertBox.style.fontWeight = "600";
+      alertBox.style.color = "#222";
+      alertBox.style.zIndex = "1000";
+
+      alertBox.innerHTML = `
+        <p>${msg}</p>
+        <button style="margin-top: 10px; padding: 8px 16px; background: black; color: white; border: none; border-radius: 8px; cursor: pointer;">OK</button>
+      `;
+      
+      document.body.appendChild(alertBox);
+
+      alertBox.querySelector("button").addEventListener("click", () => {
+        alertBox.remove();
+      });
+    }
+
+    // Validate form
+    if (!name || !email || !phone ) {
+      showAlert("Please fill in all fields.");
+      return;
+    }
+
+    if (!service) {
+      showAlert("Please select a service.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      showAlert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    // Prepare the message
+    const a1Message = `Phone: ${phone}%0AService: ${service.value}%0AMessage: ${encodeURIComponent(message)}`;
 
     // Open Calendly popup
     Calendly.initPopupWidget({
-      url: `https://calendly.com/euphrates483/new-meeting?name=${name}&email=${email}&a1=${a1Message}`
+      url: `https://calendly.com/euphrates483/new-meeting?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&a1=${a1Message}`
     });
 
     return false; // prevent actual form submission
   });
 </script>
+
 
 <script>
   document.querySelectorAll(".hair-card").forEach(card => {
@@ -1066,6 +1162,7 @@ html {
     });
   });
 </script>
+
 
 
 </body>
