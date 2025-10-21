@@ -1114,11 +1114,11 @@ html {
     }
 
     // Prepare the message
-    const a1Message = `Phone: ${phone}%0AService: ${service.value}%0AMessage: ${encodeURIComponent(message)}`;
+    const a1Message = `Name: ${name}%0AEmail: ${email}%0APhone: ${phone}%0AService: ${service.value}%0AMessage: ${encodeURIComponent(message)}`;
 
     // Open Calendly popup
     Calendly.initPopupWidget({
-      url: `https://calendly.com/euphrates483/new-meeting?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&a1=${a1Message}`
+      url: `https://calendly.com/beautynewlook82/30min?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&a1=${a1Message}`
     });
 
     return false; // prevent actual form submission
