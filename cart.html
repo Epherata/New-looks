@@ -207,6 +207,7 @@
 
       .checkout-btn {
         width: 90%;
+        height: 60%;
       }
 
       .back-btn {
@@ -224,14 +225,53 @@
   <div id="cart-total" class="cart-total"></div>
   
   
-  <a href="https://www.paypal.com/paypalme/beautynewlook82" target="_blank" class="checkout-btn">
+  <a href="#" target="_blank" class="checkout-btn" id="checkout-btn" >
+
     Proceed to PayPal
   </a>
+
+  <script>
+document.getElementById("checkout-btn").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  // Calculate total and apply 5% tax
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const tax = subtotal * 0.05;
+  const totalWithTax = subtotal + tax;
+
+  // Base PayPal link for cart checkout
+  let paypalUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_cart&upload=1&business=beautynewlook82@gmail.com";
+
+  // Add each cart item to the PayPal URL
+  cart.forEach((item, i) => {
+    const index = i + 1;
+    paypalUrl += `&item_name_${index}=${encodeURIComponent(item.name)}`;
+    paypalUrl += `&amount_${index}=${item.price.toFixed(2)}`;
+    paypalUrl += `&quantity_${index}=${item.quantity}`;
+    paypalUrl += `&currency_code=USD`;
+  });
+
+   // Add tax as a separate line
+  paypalUrl += `&tax_cart=${tax.toFixed(2)}`;
+
+  // Open PayPal checkout in a new tab
+  window.open(paypalUrl, "_blank");
+});
+</script>
+
+
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 const cartContainer = document.getElementById('cart-items');
 const totalContainer = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('paypal-checkout');
+
 
 function renderCart() {
   cartContainer.innerHTML = '';
@@ -262,7 +302,14 @@ function renderCart() {
         <p>Subtotal: $${subtotal.toFixed(2)}</p>
       </div>
       <div class="cart-actions">
-        <a href="https://www.paypal.com/paypalme/beautynewlook82" target="_blank" class="buy-btn">Buy Now</a>
+       <a 
+      href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=${encodeURIComponent(item.name)}&amount=${(item.price*1.05).toFixed(2)}&quantity=${item.quantity}&currency_code=USD"
+      target="_blank"
+      class="buy-btn"
+    >
+     Buy Now
+    </a>
+
         <button class="remove-btn" data-index="${index}">Remove</button>
       </div>
     `;
