@@ -758,10 +758,39 @@ html {
 /* Hair Cards hover zoom */
 .hair-card {
   transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything horizontally */
+  text-align: center;
+  gap: 10px; /* space between elements */
 }
 .hair-card:hover {
   transform: scale(1.08) translateY(-5px);
   box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+
+.button-group {
+  display: flex;
+  flex-direction: column; /* stack buttons vertically */
+  gap: 6px; /* space between buttons */
+  width: 80%; /* optional: make buttons similar width */
+  max-width: 250px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  color: #f1a887;
+  background: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.button-group button:hover {
+  transform: scale(1.05);
 }
 
 /* Gallery items hover tilt + scale */
@@ -875,19 +904,25 @@ html {
           <source src="./assets/20.mp4">
         </video>
        
-        <h4>20' Natural Wavy Hair for $150</h4>
+        <h4>20' Natural Wavy Hair for <br> $150</h4>
         <p>Premium quality, soft and natural look.</p>
+        <div class="button-group">
         <button class="add-to-cart-btn" 
           data-name="20' Natural Wavy Hair " 
           data-price="150"
-          data-image="assets/22.jpg">Add to Cart</button> 
+          data-image="assets/22.jpg">
+           <i class="fas fa-shopping-cart"></i> Add to Cart
+    </button> 
    
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="20' Natural Wavy Hair"
-    data-price="150">
-    <i class="fas fa-shopping-cart"></i> Buy Now
+      <button class="buy-btn" 
+        data-name="20' Natural Wavy Hair" 
+        data-price="150" 
+        data-image="assets/20.jpg">
+      
+  <i class="fas fa-bolt"></i> Buy Now
+</button>
         
-        </a>
+        </div>
 
 
 
@@ -900,21 +935,25 @@ html {
           <source src="./assets/20 wave.mp4">
         </video>
        
-        <h4>22' Natural Wavy Hair for $175</h4>
+        <h4>22' Natural Wavy Hair for <br> $175</h4>
         <p>Perfect for voluminous wave and styles.</p>
+           <div class="button-group">
         <button class="add-to-cart-btn" 
           data-name="22' Natural Wavy Hair " 
           data-price="175"
-          data-image="assets/20.jpg">Add to Cart</button> 
+          data-image="assets/22.jpg">
+           <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
    
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="22' Natural Wavy Hair"
-    data-price="175">
-    <i class="fas fa-shopping-cart"></i> Buy Now
-        
-        </a>
+      
+      <button class="buy-btn" 
+        data-name="22' Natural Wavy Hair" 
+        data-price="175" 
+        data-image="assets/22.jpg">
+      
+  <i class="fas fa-bolt"></i> Buy Now
+</button>
 
-
+</div>
 
       </div>
       <div class="hair-card">
@@ -923,39 +962,46 @@ html {
           <source src="./assets/24.mp4">
         </video>
         
-        <h4>24' Natural Wavy Hair for $200</h4>
+        <h4>24' Natural Wavy Hair for<br> $200</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
+
+            <div class="button-group">
        <button class="add-to-cart-btn" 
           data-name="24' Natural Wavy Hair " 
           data-price="200"
-          data-image="assets/24.jpg">Add to Cart</button> 
+          data-image="assets/24.jpg">
+    <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
    
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="24' Natural Wavy Hair "
-    data-price="200">
-    <i class="fas fa-shopping-cart"></i> Buy Now
-        
-        </a>
+        <button class="buy-btn" 
+          data-name="24' Natural Wavy Hair " 
+          data-price="200"
+          data-image="assets/24.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+        </div>
       </div>
+
+
         <div class="hair-card">
         <img src="./assets/26.jpg" alt="Hair 3">
          <video autoplay muted loop playsinline poster="./assets/26.jpg">
           <source src="./assets/26 wave.mp4">
         </video>
        
-        <h4>26' Natural Wavy Hair for $250</h4>
+        <h4>26' Natural Wavy Hair for <br> $250</h4>
         <p>Sleek, shiny, and natural straight hair.</p>
+        <div class="button-group">
           <button class="add-to-cart-btn" 
           data-name="26' Natural Wavy Hair " 
           data-price="250"
-          data-image="assets/26.jpg">Add to Cart</button> 
+          data-image="assets/26.jpg">
+          <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
    
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="26' Natural Wavy Hair  "
-    data-price="250">
-    <i class="fas fa-shopping-cart"></i> Buy Now
-        
-        </a>
+        <button class="buy-btn" 
+          data-name="26' Natural Wavy Hair " 
+          data-price="250"
+          data-image="assets/26.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+      </div>
       </div>
 
               <div class="hair-card">
@@ -964,19 +1010,22 @@ html {
           <source src="./assets/22curly.mp4">
         </video>
        
-        <h4>22' Natural curly Hair for $175</h4>
-        <p>Full, defined curls with a soft, voluminous texture. Perfect for a livel,  effortlessly stylish look.</p>
-         <button class="add-to-cart-btn" 
+        <h4>22' Natural curly Hair for<br>  $175</h4>
+        <p>Full, defined curls with a soft, voluminous texture. </p>
+         
+         <div class="button-group">
+        <button class="add-to-cart-btn" 
           data-name="22' Natural curly Hair " 
           data-price="175"
-          data-image="assets/22curlyp.jpg">Add to Cart</button> 
-   
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="22' Natural curly Hair "
-    data-price="175">
-    <i class="fas fa-shopping-cart"></i> Buy Now
-        
-        </a>
+          data-image="assets/22curlyp.jpg">
+          <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+
+      <button class="buy-btn" 
+          data-name="22' Natural curly Hair " 
+          data-price="175"
+          data-image="assets/22curlyp.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+      </div>
       </div>
 
               <div class="hair-card">
@@ -985,20 +1034,127 @@ html {
           <source src="./assets/24curly.mp4">
         </video>
        
-        <h4>24' Natural curly Hair for $200</h4>
-        <p>Full, defined curls with a soft, voluminous texture. Perfect for a lively, effortlessly stylish look.</p>
+        <h4>24' Natural curly Hair for <br>  $200</h4>
+        <p>Full, defined curls with a soft, voluminous texture. </p>
+        <div class="button-group">
         <button class="add-to-cart-btn" 
           data-name="24' Natural curly Hair " 
           data-price="200"
-          data-image="assets/24curlyp.jpg">Add to Cart</button> 
+          data-image="assets/24curlyp.jpg">
+           <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
    
-       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=20'+Natural+Wavy+Hair&amount=150&currency_code=USD" class="buy-btn" id="paypal-button"
-    data-name="24' Natural curly Hair "
-    data-price="200">
-    <i class="fas fa-shopping-cart"></i> Buy Now
-        
-        </a>
+            <button class="buy-btn" 
+          data-name="24' Natural curly Hair " 
+          data-price="200"
+          data-image="assets/24curlyp.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+       
+        </div>
       </div>
+<script>
+
+function showBuyNowPopup(product) {
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: #111; 
+        color: #f1a887; 
+        padding: 30px; 
+        border-radius: 20px;
+        text-align: center; 
+        width: 90%; 
+        max-width: 400px;
+        box-shadow: 0 0 25px rgba(241,168,135,0.5);
+        animation: fadeIn 0.3s ease;
+      ">
+        <img src="${product.image}" alt="${product.name}" 
+          style="display: block; margin: 0 auto 20px; width: 130px; height: 130px; object-fit: cover; border-radius: 10px; box-shadow: 0 0 15px rgba(241,168,135,0.3);">
+        <h3 style="margin:5px 0; color: #fff; font-size: 22px;">${product.name}</h3>
+        <h4 style="margin:8px 0; font-weight: normal; color:#f1a887;">How many Bundles do you want?</h4>
+        <p style="color:#ccc; margin-bottom:15px;">$${product.price.toFixed(2)} each</p>
+
+        <div style="display:flex;justify-content:center;align-items:center;gap:15px;margin:20px 0;">
+          <button id="minus" style="background:#f1a887;color:black;border:none;padding:10px 16px;border-radius:8px;font-size:20px;cursor:pointer;">−</button>
+          <span id="qty" style="font-size:22px;color:white;">1</span>
+          <button id="plus" style="background:#f1a887;color:black;border:none;padding:10px 16px;border-radius:8px;font-size:20px;cursor:pointer;">+</button>
+        </div>
+
+        <p id="total" style="color:white; font-size:18px; margin-bottom:20px;">Total: $${product.price.toFixed(2)}</p>
+
+        <div style="display:flex;justify-content:center;gap:12px;">
+          <button id="buyNow" style="
+            background:#f1a887;
+            color:black;
+            border:none;
+            padding:12px 22px;
+            border-radius:10px;
+            font-weight:bold;
+            font-size:16px;
+            cursor:pointer;
+            transition: transform 0.2s;
+          ">Buy Now</button>
+          <button id="close" style="
+            background:transparent;
+            color:#f1a887;
+            border:2px solid #f1a887;
+            padding:10px 20px;
+            border-radius:10px;
+            font-size:16px;
+            cursor:pointer;
+            transition: background 0.2s;
+          ">Cancel</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  let qty = 1;
+  const qtyEl = popup.querySelector('#qty');
+  const totalEl = popup.querySelector('#total');
+
+  popup.querySelector('#plus').onclick = () => {
+    qty++;
+    qtyEl.textContent = qty;
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  };
+
+  popup.querySelector('#minus').onclick = () => {
+    if (qty > 1) qty--;
+    qtyEl.textContent = qty;
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  };
+
+  popup.querySelector('#buyNow').onclick = () => {
+    const paypalURL = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=${encodeURIComponent(product.name)}&amount=${(product.price*1.05).toFixed(2)}&quantity=${qty}&currency_code=USD`;
+    window.location.href = paypalURL;
+  };
+
+  popup.querySelector('#close').onclick = () => {
+    document.body.removeChild(popup);
+  };
+}
+
+document.querySelectorAll('.buy-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const product = {
+      name: button.getAttribute('data-name'),
+      price: parseFloat(button.getAttribute('data-price')),
+      image: button.getAttribute('data-image')
+    };
+    showBuyNowPopup(product);
+  });
+});
+</script>
+
 
 
         <div class="hair-card">
@@ -1111,8 +1267,8 @@ html {
     <input type="radio" id="service5" name="service" value="Treatment">
     <label for="service5">Treatment</label>
 
-  <input type="radio" id="service6" name="service" value="Nail Services">
-  <label for="service6">Nail Services</label>
+ <!--<input type="radio" id="service6" name="service" value="Nail Services">
+  <label for="service6">Nail Services</label>  -->
 </div>
 
        
