@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  
   <meta charset="UTF-8">
   <title>Your Cart | New Look</title>
   <link rel="stylesheet" href="style.css">
@@ -315,7 +317,7 @@
   </style>
 </head>
 <body>
-    <a href="index.html" class="back-btn">⬅ Back to Shop</a>
+    <a href="shop.html" class="back-btn">⬅ Back to Shop</a>
 
   <h2>🛍️ Your Cart</h2>
   <div id="cart-items"></div>
@@ -327,8 +329,29 @@
     Proceed to PayPal
   </a>
 
-  <script>
-document.getElementById("checkout-btn").addEventListener("click", function (e) {
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxrJNOkFpCMP9fwLoi_1V8yTo82LNItOw",
+    authDomain: "new-look-8dee3.firebaseapp.com",
+    projectId: "new-look-8dee3",
+    storageBucket: "new-look-8dee3.appspot.com",
+    messagingSenderId: "1000676019676",
+    appId: "1:1000676019676:web:2cfd3300222b56ee561319",
+    measurementId: "G-JM2LTMY80Y"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+
+
+<script>
+document.getElementById("checkout-btn").addEventListener("click", function(e) {
   e.preventDefault();
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -336,31 +359,420 @@ document.getElementById("checkout-btn").addEventListener("click", function (e) {
     alert("Your cart is empty!");
     return;
   }
-  // Calculate total and apply 5% tax
+
+  // Calculate subtotal and total with tax
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.05;
   const totalWithTax = subtotal + tax;
 
-  // Base PayPal link for cart checkout
-  let paypalUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_cart&upload=1&business=beautynewlook82@gmail.com";
+  // Prepare cart description
+  const cartDescription = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
 
-  // Add each cart item to the PayPal URL
-  cart.forEach((item, i) => {
-    const index = i + 1;
-    paypalUrl += `&item_name_${index}=${encodeURIComponent(item.name)}`;
-    paypalUrl += `&amount_${index}=${item.price.toFixed(2)}`;
-    paypalUrl += `&quantity_${index}=${item.quantity}`;
-    paypalUrl += `&currency_code=USD`;
+  // Create popup
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: #111; 
+        color: #f1a887; 
+        padding: 25px; 
+        border-radius: 20px;
+        text-align: center; 
+        width: 90%; max-width: 400px;
+        max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 0 25px rgba(241,168,135,0.5);
+      ">
+        <h3 style="margin-bottom:10px;">Your Cart</h3>
+        <div id="cart-items-popup" style="text-align:left; margin-bottom:15px;">
+          ${cart.map(item =>`
+          <div style="
+            display: flex; 
+            align-items: center; 
+            background: #1a1a1a; 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            border-radius: 10px;
+          ">
+              
+            <div style="flex:1;">
+              <p style="margin:0; font-weight:bold; color:#f1a887;">${item.name}</p>
+              <p style="margin:2px 0; font-size:14px; color:#ccc;">Qty: ${item.quantity} | $${(item.price*item.quantity).toFixed(2)}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+       
+        <p style="margin:10px 0; font-size:18px;">Subtotal: $${subtotal.toFixed(2)}</p>
+        <p style="margin:10px 0; font-size:18px;">Tax (5%): $${tax.toFixed(2)}</p>
+        <p style="margin:10px 0; font-size:20px; font-weight:bold;">Total: $${totalWithTax.toFixed(2)}</p>
+
+        <div style="margin:15px 0; text-align:left;">
+          <label><input type="radio" name="delivery_cart" value="pickup" checked> Pickup</label>
+          <label style="margin-left:15px;"><input type="radio" name="delivery_cart" value="delivery"> Delivery</label>
+        </div>
+
+        <div id="customer-info-cart" style="text-align:left; margin-bottom:15px;">
+          <input type="text" id="name_cart" placeholder="Full Name" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="tel" id="phone_cart" placeholder="Phone Number" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="text" id="address_cart" placeholder="Delivery Address" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none; display:none;">
+        </div>
+
+        <div id="paypal-button-container-cart" style="margin-top:10px;"></div>
+
+        <button id="close_cart" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  const addressEl = popup.querySelector('#address_cart');
+
+  // Show/hide address if delivery selected
+  popup.querySelectorAll('input[name="delivery_cart"]').forEach(radio => {
+    radio.onchange = () => {
+      if (radio.value === 'delivery') addressEl.style.display = 'block';
+      else addressEl.style.display = 'none';
+    };
   });
 
-   // Add tax as a separate line
-  paypalUrl += `&tax_cart=${tax.toFixed(2)}`;
+  // Close button
+  popup.querySelector('#close_cart').onclick = () => {
+    document.body.removeChild(popup);
+  };
 
-  // Open PayPal checkout in a new tab
-  window.open(paypalUrl, "_blank");
+  // Render PayPal button
+  paypal.Buttons({
+    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+    createOrder: function(data, actions) {
+      const name = popup.querySelector('#name_cart').value.trim();
+      const phone = popup.querySelector('#phone_cart').value.trim();
+      const deliveryMethod = popup.querySelector('input[name="delivery_cart"]:checked').value;
+      const address = popup.querySelector('#address_cart').value.trim();
+
+      if(!name || !phone || (deliveryMethod==='delivery' && !address)) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      return actions.order.create({
+        purchase_units: [{
+          amount: { value: totalWithTax.toFixed(2) },
+          description: `Cart items: ${cartDescription} (${deliveryMethod.toUpperCase()})`
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+       return actions.order.capture().then(function(details) {
+        const name = popup.querySelector('#name_cart').value.trim();
+        const phone = popup.querySelector('#phone_cart').value.trim();
+        const deliveryMethod = popup.querySelector('input[name="delivery_cart"]:checked').value;
+        const address = popup.querySelector('#address_cart').value.trim();
+
+        // Save order to Firestore
+        const orderData = {
+          type: "cart",
+          items: cart.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          total: totalWithTax.toFixed(2),
+          deliveryType: deliveryMethod,
+          customerName: name,
+          customerPhone: phone,
+          customerAddress: address || "",
+          date: new Date().toISOString()
+        };
+
+        db.collection("orders").add(orderData)
+          .then(() => console.log("Cart order saved to Firestore!"))
+          .catch(err => console.error("Firestore error:", err));
+
+        alert(`Transaction completed by ${details.payer.name.given_name}`);
+        document.body.removeChild(popup);
+        localStorage.removeItem('cart'); // empty cart after payment
+        renderCart(); // re-render empty cart
+      });
+    }
+  }).render(popup.querySelector('#paypal-button-container-cart'));
 });
 </script>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AXSriDJTYWvTM7Z_ngG8K8-rJWylBvmxwTm7RrFH38hZG2T7z6371jAMZkZuabYlFa1rw9sDuvGbgtvl&currency=USD&enable-funding=card,venmo,applepay"></script>
+
+<script>
+  function showBuyNowPopup(product) {
+  // Create popup container
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <style>
+    input[name="delivery"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #f1a887;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+  </style>
+
+    <div style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: #111; 
+        color: #f1a887; 
+        padding: 25px; 
+        border-radius: 20px;
+        text-align: center; 
+        width: 90%; 
+       max-width: 400px;
+  max-height: 90vh;         /* limits height to 90% of viewport */
+  overflow-y: auto;  
+        box-shadow: 0 0 25px rgba(241,168,135,0.5);
+        animation: fadeIn 0.3s ease;
+      ">
+        <img src="${product.image}" alt="${product.name}" 
+          style="display: block; margin: 0 auto 15px; width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+        <h3 style="margin:5px 0; font-size: 22px;">${product.name}</h3>
+        <p style="margin:5px 0; color:#ccc;">$${product.price.toFixed(2)} each</p>
+
+        <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin:10px 0;">
+          <button id="minus" style="padding:10px 16px; font-size:20px; border:none; border-radius:8px; background:#f1a887; color:black; cursor:pointer;">−</button>
+          <span id="qty" style="font-size:22px; color:white;">1</span>
+          <button id="plus" style="padding:10px 16px; font-size:20px; border:none; border-radius:8px; background:#f1a887; color:black; cursor:pointer;">+</button>
+        </div>
+
+        <p id="total" style="color:white; font-size:18px; margin:10px 0;">Total: $${product.price.toFixed(2)}</p>
+
+        <div style="margin:15px 0; text-align:left;">
+          <label><input type="radio" name="delivery" value="pickup" checked> Pickup</label>
+          <label style="margin-left:15px;"><input type="radio" name="delivery" value="delivery"> Delivery</label>
+        </div>
+
+        <div id="customer-info" style="text-align:left; margin-bottom:15px;">
+          <input type="text" id="name" placeholder="Full Name" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="tel" id="phone" placeholder="Phone Number" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="text" id="address" placeholder="Delivery Address" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none; display:none;">
+        </div>
+
+        <div id="paypal-button-container" style="margin-top:10px;"></div>
+
+        <button id="close" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  let qty = 1;
+  const qtyEl = popup.querySelector('#qty');
+  const totalEl = popup.querySelector('#total');
+  const addressEl = popup.querySelector('#address');
+
+  function updateTotal() {
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  }
+
+  // Quantity buttons
+  popup.querySelector('#plus').onclick = () => { qty++; qtyEl.textContent = qty; updateTotal(); renderPayPalButton(); };
+  popup.querySelector('#minus').onclick = () => { if(qty>1) qty--; qtyEl.textContent = qty; updateTotal(); renderPayPalButton(); };
+
+  // Delivery/Pickup toggle
+  popup.querySelectorAll('input[name="delivery"]').forEach(radio => {
+    radio.onchange = () => {
+      if (radio.value === 'delivery') addressEl.style.display = 'block';
+      else addressEl.style.display = 'none';
+    };
+  });
+
+  // Cancel button
+  popup.querySelector('#close').onclick = () => {
+    document.body.removeChild(popup);
+  };
+
+  // Render PayPal Smart Button
+  function renderPayPalButton() {
+    const container = popup.querySelector('#paypal-button-container');
+    container.innerHTML = ''; // reset container
+
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+      createOrder: function(data, actions) {
+        // Collect customer info
+        const name = popup.querySelector('#name').value.trim();
+        const phone = popup.querySelector('#phone').value.trim();
+        const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
+        const address = popup.querySelector('#address').value.trim();
+
+        if(!name || !phone || (deliveryMethod==='delivery' && !address)) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+
+        
+
+        // Optional: you can send customer info to server here
+
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: (product.price * qty * 1.05).toFixed(2) // including 5% extra if needed
+            },
+            description: `${product.name} x ${qty} (${deliveryMethod.toUpperCase()})`
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert(`Transaction completed by ${details.payer.name.given_name}`);
+          document.body.removeChild(popup);
+        });
+      }
+    }).render(container);
+  }
+
+  renderPayPalButton(); // initial render
+}
+
+
+function showCartItemBuyNowPopup(item, index) {
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <div style="
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background:#111; color:#f1a887;
+        padding: 25px; border-radius: 20px;
+        text-align:center; width:90%; max-width:400px;
+        max-height:90vh; overflow-y:auto;
+      ">
+        <img src="${item.image}" alt="${item.name}" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+        <h3>${item.name}</h3>
+        <p>$${item.price.toFixed(2)} each</p>
+
+        <div style="display:flex;justify-content:center;align-items:center;gap:15px;margin:10px 0;">
+          <button id="minus" style="background:#f1a887;color:black;border:none;padding:8px 14px;border-radius:6px;font-size:18px;">−</button>
+          <span id="qty">${item.quantity}</span>
+          <button id="plus" style="background:#f1a887;color:black;border:none;padding:8px 14px;border-radius:6px;font-size:18px;">+</button>
+        </div>
+
+        <p id="total">Total: $${(item.price * item.quantity).toFixed(2)}</p>
+
+        <div style="margin:15px 0; text-align:left;">
+          <label><input type="radio" name="delivery" value="pickup" checked> Pickup</label>
+          <label style="margin-left:15px;"><input type="radio" name="delivery" value="delivery"> Delivery</label>
+        </div>
+
+        <div id="customer-info">
+          <input type="text" id="name" placeholder="Full Name" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="tel" id="phone" placeholder="Phone Number" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="text" id="address" placeholder="Delivery Address" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none; display:none;">
+        </div>
+
+        <div id="paypal-button-container"></div>
+        <button id="close" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  let qty = item.quantity;
+  const qtyEl = popup.querySelector('#qty');
+  const totalEl = popup.querySelector('#total');
+  const addressEl = popup.querySelector('#address');
+
+  const updateTotal = () => totalEl.textContent = `Total: $${(item.price * qty).toFixed(2)}`;
+
+  popup.querySelector('#plus').onclick = () => { qty++; qtyEl.textContent = qty; updateTotal(); renderPayPal(); };
+  popup.querySelector('#minus').onclick = () => { if(qty>1){ qty--; qtyEl.textContent = qty; updateTotal(); renderPayPal(); }};
+
+  popup.querySelectorAll('input[name="delivery"]').forEach(radio=>{
+    radio.onchange = () => { addressEl.style.display = radio.value==='delivery' ? 'block' : 'none'; };
+  });
+
+  popup.querySelector('#close').onclick = () => document.body.removeChild(popup);
+
+  function renderPayPal() {
+    const container = popup.querySelector('#paypal-button-container');
+    container.innerHTML = '';
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        const name = popup.querySelector('#name').value.trim();
+        const phone = popup.querySelector('#phone').value.trim();
+        const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
+        const address = popup.querySelector('#address').value.trim();
+        if(!name || !phone || (deliveryMethod==='delivery' && !address)) { alert('Fill all fields!'); return; }
+
+        // Send order to Firebase
+        const orderData = {
+          type: 'cart-single',
+          itemName: item.name,
+          quantity: qty,
+          total: (item.price * qty * 1.05).toFixed(2),
+          deliveryType: deliveryMethod,
+          customerName: name,
+          customerPhone: phone,
+          customerAddress: address || '',
+          date: new Date().toISOString()
+        };
+        db.collection("orders").add(orderData)
+          .then(()=>console.log("Cart item order saved"))
+          .catch(err=>console.error(err));
+
+        return actions.order.create({
+          purchase_units:[{ amount:{ value:(item.price*qty*1.05).toFixed(2) }, description:`${item.name} x ${qty} (${deliveryMethod.toUpperCase()})` }]
+        });
+      },
+      onApprove: function(data, actions){
+        return actions.order.capture().then(function(details){
+          alert(`Transaction completed by ${details.payer.name.given_name}`);
+          document.body.removeChild(popup);
+          cart.splice(index,1); // remove item from cart after Buy Now
+          localStorage.setItem('cart', JSON.stringify(cart));
+          renderCart();
+        });
+      }
+    }).render(container);
+  }
+
+  renderPayPal();
+}
+
+function attachBuyNowPopup() {
+  document.querySelectorAll('.buy-btn').forEach(button => {
+    button.addEventListener('click', () => {
+       const product = {
+        name: button.dataset.name,
+        price: parseFloat(button.dataset.price),
+        image: button.dataset.image,
+        quantity: parseInt(button.dataset.quantity)
+      };
+      showBuyNowPopup(product);
+    });
+  });
+}
+
+
+
+</script>
 
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -399,22 +811,26 @@ function renderCart() {
         <p>Subtotal: $${subtotal.toFixed(2)}</p>
       </div>
       <div class="cart-actions">
-       <a 
-      href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=beautynewlook82@gmail.com&item_name=${encodeURIComponent(item.name)}&amount=${(item.price*1.05).toFixed(2)}&quantity=${item.quantity}&currency_code=USD"
-      target="_blank"
-      class="buy-btn"
-    >
-     Buy Now
-    </a>
+      <button class="buy-btn" 
+    data-name="${item.name}" 
+    data-price="${item.price}" 
+    data-image="${item.image}" 
+    data-quantity="${item.quantity}">
+  Buy Now
+</button>
+
 
         <button class="remove-btn" data-index="${index}">Remove</button>
       </div>
     `;
     cartContainer.appendChild(div);
+     totalContainer.textContent = `Total: $${total.toFixed(2)}`;
+  localStorage.setItem('cart', JSON.stringify(cart));
+div.querySelector('.buy-btn').onclick = () => showCartItemBuyNowPopup(item, index);
+
   });
 
-  totalContainer.textContent = `Total: $${total.toFixed(2)}`;
-  localStorage.setItem('cart', JSON.stringify(cart));
+
 }
 
 /* Update quantity FROM CART page only — do NOT reorder items here */

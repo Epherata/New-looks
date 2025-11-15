@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxrJNOkFpCMP9fwLoi_1V8yTo82LNItOw",
+    authDomain: "new-look-8dee3.firebaseapp.com",
+    projectId: "new-look-8dee3",
+    storageBucket: "new-look-8dee3.firebasestorage.app",
+    messagingSenderId: "1000676019676",
+    appId: "1:1000676019676:web:2cfd3300222b56ee561319",
+    measurementId: "G-JM2LTMY80Y"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(); // Firestore database reference
+</script>
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Looks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ==== GENERAL STYLING ==== */
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {font-family:'Montserrat', sans-serif; background:#fff8f0; color:#111;}
+    a {text-decoration:none; color:inherit;}
+    img, iframe {display:block; width:100%;}
+ /* Smooth scroll for section links */
+html {
+  scroll-behavior: smooth;
+}
+
+    /* ==== HEADER ==== */
+    header {
+      position: fixed;
+      top:0;
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 50px;
+      z-index:1000;
+      transition: background 0.5s, padding 0.3s;
+      
+    }
+    header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  z-index: 1000;
+  transition: background 0.5s, padding 0.3s;
+  background: rgba(255, 255, 255, 0.2); /* light transparent background */
+  backdrop-filter: blur(8px); /* subtle blur effect */
+}
+    header.scrolled {background: rgba(255,248,240,0.95); backdrop-filter: blur(10px); padding:15px 50px;}
+    .logo {font-family:'Playfair Display', serif; font-size:2rem; font-weight:700; color:#f1a887;gap: 10px;}
+    .logo img {
+   height: 60px;        /* adjust size */
+  width: 60px;         /* make it a square */
+  border-radius: 50%;  /* makes it a circle */
+  object-fit: cover;   /* ensures it fills the circle nicely */
+  
+}
+
+
+/* Hamburger icon (hidden on desktop) */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: #e19775;
+ cursor: pointer;
+  margin-left: auto;
+  z-index: 1001; /* above menu */
+}
+
+    nav a {margin-left:25px; font-weight:600; transition:0.3s;}
+    nav a:hover {color:#f1a887; text-shadow:0 0 10px rgba(212,175,55,0.7);}
+
+    /* ==== SECTIONS ==== */
+    section {padding:100px 50px;}
+  section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #f1a887;  /* golden color */
+  text-align: center;  /* centered */
+}
+
+
+    /* ==== HUMAN HAIR GRID ==== */
+     #hair {text-align: center; padding: 50px 0;}
+     #hair h2 {
+  display: inline-block; /* so the background wraps the text */
+  background-color: black;
+  color: #F1A887;
+  padding: 10px 20px;
+  border-radius: 8px; /* optional: rounded corners */
+  font-weight: bold;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  text-align: center;
+}
+    .hair-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:30px;}
+    .hair-card {background:#fff8f0; border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;}
+    .hair-card:hover {transform:translateY(-10px) scale(1.05); box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+    .hair-card img {width:100%; display:block;}
+    .hair-card h4 {padding:15px; font-weight:600; color:#111;}
+    .hair-card p {padding:0 15px 15px; font-size:0.95rem; color:#333;}
+
+    /* ==== HUMAN HAIR GRID ==== */
+.hair-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 30px;
+}
+
+.hair-card {
+  background:#fff8f0;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+  overflow: hidden; /* ensures image doesn't break layout normally */
+  position: relative;
+}
+.hair-card:hover img {
+  opacity: 0;   /* hide image */
+}
+.hair-card:hover video {
+  opacity: 1;   /* show video */
+  pointer-events: auto;
+}
+
+.hair-card:hover {
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Make all images equal height */
+
+.hair-card img,
+.hair-card video {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.4s ease;
+}
+
+.hair-card video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;   /* hidden initially */
+  pointer-events: none;
+}
+
+.hair-card h4 {
+  padding:15px;
+  font-weight:600;
+  color:#111;
+}
+
+.hair-card p {
+  padding:0 15px 15px;
+  font-size:0.95rem;
+  color:#333;
+  margin-bottom: -5px;
+}
+
+
+
+.video-heading {
+  margin-top: 3rem;
+  color: #f1a887;
+  font-size: 1.5rem;
+}
+
+.video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.video-grid iframe {
+  width: 100%;
+  max-width: 480px;
+  height: 352px;
+  border: none;
+  border-radius: 10px;
+}
+
+
+.add-to-cart-btn{display: inline-block;
+  margin-top: 5px; /* lowered from 15px to 5px */
+  background: #111111; /* gold */
+  color: #f1a887; /* black text */
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;}
+.add-to-cart-btn:hover {
+  background: #f1a887; /* darker gold on hover */
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+  
+/* ==== BUY BUTTON ==== */
+.buy-btn {
+  display: inline-block;
+  margin-top: 5px; /* lowered from 15px to 5px */
+  background: #111111; /* gold */
+  color: #f1a887; /* black text */
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.buy-btn i {
+  margin-right: 8px;
+}
+
+.buy-btn:hover {
+  background: #f1a887; /* darker gold on hover */
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.custom-alert {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-box {
+  background: #f1a887;
+  color: white;
+  padding: 25px 35px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-box button {
+  background: white;
+  color: #f1a887;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alert-box button:hover {
+  background: #f5f5f5;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
+
+/* new style cart thing */
+
+.cart-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.cart-popup-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  width: 300px;
+}
+
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.quantity-control button {
+  background: black;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.quantity-control span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.popup-actions button {
+  background: #f1a887;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
+
+
+    /* ==== FOOTER ==== */
+    footer {background:#111; color:#fff; text-align:center; padding:40px 20px;}
+    footer .social a {margin:0 10px; font-size:1.5rem; color:#fff; transition:0.3s;}
+    footer .social a:hover {color:#f1a887; transform:scale(1.2);}
+
+    /* ==== MEDIA ==== */
+    /* Mobile Responsive */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header .logo {
+    margin-bottom: 10px;
+  }
+    header .logo img {
+    width: 70px;   /* smaller logo size on mobile */
+    height: auto;   /* keeps proportions */
+  }
+
+  header nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+    @media(max-width:768px){#home h1{font-size:3rem;} section{padding:70px 20px;}}
+  
+  /* MOBILE RESPONSIVE RADIO BUTTONS */
+@media (max-width: 768px) {
+
+   header {
+    flex-wrap: wrap;
+  }
+
+
+  /* Hide menu by default */
+
+   header nav {
+     display: none;
+    flex-direction: column;
+    width: 50%;
+    background: none; /* cream */
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+
+  header nav a {
+    padding: 1rem;
+    text-align: center;
+    color: #000; /* black text */
+    border-top: 1px solid #ddd;
+    transition: background 0.3s, color 0.3s;
+  }
+   header nav a:hover,
+  header nav a:active {
+    color: #f1a887; 
+  }
+
+  /* Show hamburger */
+  .menu-toggle {
+    display: block;
+  }
+
+  /* When active, show the dropdown */
+  header nav.showing {
+    display: flex;
+  }
+
+
+  .services-options {
+    flex-direction: column; /* stack vertically on small screens */
+    gap: 10px;
+    align-items: center;
+  }
+
+  .services-options label {
+    padding: 12px 20px; /* slightly smaller padding to fit mobile */
+    font-size: 0.9rem; /* adjust font size for smaller screens */
+    width: 80%; /* make the oval stretch a bit on mobile */
+  }
+}
+
+/* Buttons hover animation */
+.btn {
+  transition: all 0.4s ease;
+}
+.btn:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Hair Cards hover zoom */
+.hair-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything horizontally */
+  text-align: center;
+  gap: 10px; /* space between elements */
+}
+.hair-card:hover {
+  transform: scale(1.08) translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+
+.button-group {
+  display: flex;
+  flex-direction: column; /* stack buttons vertically */
+  gap: 6px; /* space between buttons */
+  width: 80%; /* optional: make buttons similar width */
+  max-width: 250px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  color: #f1a887;
+  background: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.button-group button:hover {
+  transform: scale(1.05);
+}
+
+/* Gallery items hover tilt + scale */
+.gallery-item {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.gallery-item:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+    <img src="./assets/log.jpg" alt="New Look Logo">
+   
+    </div>
+    
+    <!-- Hamburger icon -->
+  <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    <nav >
+      <a href="index.html">Home</a>
+     <a href="cart.html" class="cart-link">
+  <i class="fas fa-shopping-cart"></i>
+  <span id="cart-count">0</span>
+</a>
+
+    </nav>
+  </header>
+
+
+
+<br> <br> <br>
+ 
+  <!-- HUMAN HAIR -->
+  <section id="hair">
+    <h2>Human Hair Collection</h2>
+    <div class="hair-grid">
+      <div class="hair-card">
+        <img src="./assets/20.jpg" alt="Hair 1">
+        <video autoplay muted loop playsinline poster="./assets/20.jpg">
+          <source src="./assets/20.mp4">
+        </video>
+       
+        <h4>20' Natural Wavy Hair for <br> $150</h4>
+        <p>Premium quality, soft and natural look.</p>
+        <div class="button-group">
+        <button class="add-to-cart-btn" 
+          data-name="20' Natural Wavy Hair " 
+          data-price="150"
+          data-image="assets/22.jpg">
+           <i class="fas fa-shopping-cart"></i> Add to Cart
+    </button> 
+   
+      <button class="buy-btn" 
+        data-name="20' Natural Wavy Hair" 
+        data-price="150" 
+        data-image="assets/20.jpg">
+      
+  <i class="fas fa-bolt"></i> Buy Now
+</button>
+        
+        </div>
+
+
+
+
+
+      </div>
+      <div class="hair-card">
+        <img src="./assets/22.jpg" alt="Hair 2">
+         <video autoplay muted loop playsinline poster="./assets/22.jpg">
+          <source src="./assets/20 wave.mp4">
+        </video>
+       
+        <h4>22' Natural Wavy Hair for <br> $1</h4>
+        <p>Perfect for voluminous wave and styles.</p>
+           <div class="button-group">
+        <button class="add-to-cart-btn" 
+          data-name="22' Natural Wavy Hair " 
+          data-price="1"
+          data-image="assets/22.jpg">
+           <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+   
+      
+      <button class="buy-btn" 
+        data-name="22' Natural Wavy Hair" 
+        data-price="1" 
+        data-image="assets/22.jpg">
+      
+  <i class="fas fa-bolt"></i> Buy Now
+</button>
+
+</div>
+
+      </div>
+      <div class="hair-card">
+        <img src="./assets/24.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/24.jpg">
+          <source src="./assets/24.mp4">
+        </video>
+        
+        <h4>24' Natural Wavy Hair for<br> $1</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+
+            <div class="button-group">
+       <button class="add-to-cart-btn" 
+          data-name="24' Natural Wavy Hair " 
+          data-price="1"
+          data-image="assets/24.jpg">
+    <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+   
+        <button class="buy-btn" 
+          data-name="24' Natural Wavy Hair " 
+          data-price="1"
+          data-image="assets/24.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+        </div>
+      </div>
+
+
+        <div class="hair-card">
+        <img src="./assets/26.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/26.jpg">
+          <source src="./assets/26 wave.mp4">
+        </video>
+       
+        <h4>26' Natural Wavy Hair for <br> $1</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+        <div class="button-group">
+          <button class="add-to-cart-btn" 
+          data-name="26' Natural Wavy Hair " 
+          data-price="1"
+          data-image="assets/26.jpg">
+          <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+   
+        <button class="buy-btn" 
+          data-name="26' Natural Wavy Hair " 
+          data-price="1"
+          data-image="assets/26.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+      </div>
+      </div>
+
+              <div class="hair-card">
+        <img src="./assets/22curlyp.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/22curlyp.jpg">
+          <source src="./assets/22curly.mp4">
+        </video>
+       
+        <h4>22' Natural curly Hair for<br>  $175</h4>
+        <p>Full, defined curls with a soft, voluminous texture. </p>
+         
+         <div class="button-group">
+        <button class="add-to-cart-btn" 
+          data-name="22' Natural curly Hair " 
+          data-price="175"
+          data-image="assets/22curlyp.jpg">
+          <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+
+      <button class="buy-btn" 
+          data-name="22' Natural curly Hair " 
+          data-price="175"
+          data-image="assets/22curlyp.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+      </div>
+      </div>
+
+              <div class="hair-card">
+        <img src="./assets/24curlyp.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/24curlyp.jpg">
+          <source src="./assets/24curly.mp4">
+        </video>
+       
+        <h4>24' Natural curly Hair for <br>  $200</h4>
+        <p>Full, defined curls with a soft, voluminous texture. </p>
+        <div class="button-group">
+        <button class="add-to-cart-btn" 
+          data-name="24' Natural curly Hair " 
+          data-price="200"
+          data-image="assets/24curlyp.jpg">
+           <i class="fas fa-shopping-cart"></i>Add to Cart</button> 
+   
+            <button class="buy-btn" 
+          data-name="24' Natural curly Hair " 
+          data-price="200"
+          data-image="assets/24curlyp.jpg">
+    <i class="fas fa-bolt"></i>Buy Now</button> 
+       
+        </div>
+      </div>
+
+
+
+
+<!-- Include PayPal SDK in your HTML head -->
+
+
+<script src="https://www.paypal.com/sdk/js?client-id=AXSriDJTYWvTM7Z_ngG8K8-rJWylBvmxwTm7RrFH38hZG2T7z6371jAMZkZuabYlFa1rw9sDuvGbgtvl&currency=USD&enable-funding=card,venmo,applepay"></script>
+
+<script>
+function showBuyNowPopup(product) {
+  // Create popup container
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <style>
+    input[name="delivery"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #f1a887;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+  </style>
+
+    <div style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: #111; 
+        color: #f1a887; 
+        padding: 25px; 
+        border-radius: 20px;
+        text-align: center; 
+        width: 90%; 
+       max-width: 400px;
+  max-height: 90vh;         /* limits height to 90% of viewport */
+  overflow-y: auto;  
+        box-shadow: 0 0 25px rgba(241,168,135,0.5);
+        animation: fadeIn 0.3s ease;
+      ">
+        <img src="${product.image}" alt="${product.name}" 
+          style="display: block; margin: 0 auto 15px; width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+        <h3 style="margin:5px 0; font-size: 22px;">${product.name}</h3>
+        <p style="margin:5px 0; color:#ccc;">$${product.price.toFixed(2)} each</p>
+
+        <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin:10px 0;">
+          <button id="minus" style="padding:10px 16px; font-size:20px; border:none; border-radius:8px; background:#f1a887; color:black; cursor:pointer;">−</button>
+          <span id="qty" style="font-size:22px; color:white;">1</span>
+          <button id="plus" style="padding:10px 16px; font-size:20px; border:none; border-radius:8px; background:#f1a887; color:black; cursor:pointer;">+</button>
+        </div>
+
+        <p id="total" style="color:white; font-size:18px; margin:10px 0;">Total: $${product.price.toFixed(2)}</p>
+
+        <div style="margin:15px 0; text-align:left;">
+          <label><input type="radio" name="delivery" value="pickup" checked> Pickup</label>
+          <label style="margin-left:15px;"><input type="radio" name="delivery" value="delivery"> Delivery</label>
+        </div>
+
+        <div id="customer-info" style="text-align:left; margin-bottom:15px;">
+          <input type="text" id="name" placeholder="Full Name" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="tel" id="phone" placeholder="Phone Number" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none;">
+          <input type="text" id="address" placeholder="Delivery Address" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none; display:none;">
+        </div>
+
+        <div id="paypal-button-container" style="margin-top:10px;"></div>
+
+        <button id="close" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  let qty = 1;
+  const qtyEl = popup.querySelector('#qty');
+  const totalEl = popup.querySelector('#total');
+  const addressEl = popup.querySelector('#address');
+
+  function updateTotal() {
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  }
+
+  // Quantity buttons
+  popup.querySelector('#plus').onclick = () => { qty++; qtyEl.textContent = qty; updateTotal(); renderPayPalButton(); };
+  popup.querySelector('#minus').onclick = () => { if(qty>1) qty--; qtyEl.textContent = qty; updateTotal(); renderPayPalButton(); };
+
+  // Delivery/Pickup toggle
+  popup.querySelectorAll('input[name="delivery"]').forEach(radio => {
+    radio.onchange = () => {
+      if (radio.value === 'delivery') addressEl.style.display = 'block';
+      else addressEl.style.display = 'none';
+    };
+  });
+
+  // Cancel button
+  popup.querySelector('#close').onclick = () => {
+    document.body.removeChild(popup);
+  };
+
+  // Render PayPal Smart Button
+  function renderPayPalButton() {
+    const container = popup.querySelector('#paypal-button-container');
+    container.innerHTML = ''; // reset container
+
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+      createOrder: function(data, actions) {
+        // Collect customer info
+        const name = popup.querySelector('#name').value.trim();
+        const phone = popup.querySelector('#phone').value.trim();
+        const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
+        const address = popup.querySelector('#address').value.trim();
+
+        if(!name || !phone || (deliveryMethod==='delivery' && !address)) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        // Optional: you can send customer info to server here
+
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: (product.price * qty * 1.05).toFixed(2) // including 5% extra if needed
+            },
+            description: `${product.name} x ${qty} (${deliveryMethod.toUpperCase()})`
+          }]
+        });
+      },
+
+//saving it for the admin 
+
+     onApprove: function(data, actions) {
+  return actions.order.capture().then(function(details) {
+
+    // 1️⃣ Collect selected user info
+    const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const customerAddress = document.getElementById('customerAddress')?.value || "Pickup";
+
+    // 2️⃣ Product details (you already have itemName, itemPrice, quantity)
+    const orderData = {
+      deliveryType,
+      customerName,
+      customerPhone,
+      customerAddress,
+      itemName,
+      itemPrice,
+      quantity,
+      total: (itemPrice * quantity).toFixed(2),
+      paymentID: details.id,
+      payerEmail: details.payer.email_address,
+      date: new Date().toISOString()
+    };
+
+    // 3️⃣ Save to localStorage (simple method)
+  //  let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    //orders.push(orderData);
+   // localStorage.setItem("orders", JSON.stringify(orders));
+
+   // Save order to Firebase
+db.collection("orders").add(orderData)
+  .then(() => {
+    alert("Payment Successful! Your order has been sent to admin ❤️");
+  })
+  .catch(err => {
+    console.error("Error saving order:", err);
+    alert("Something went wrong. Try again.");
+  });
+
+
+    // 4️⃣ Success popup
+    alert("Payment Successful! Thank you for your order ❤️");
+
+  });
+}
+
+    }).render(container);
+  }
+
+  renderPayPalButton(); // initial render
+}
+
+// Attach to all Buy Now buttons
+document.querySelectorAll('.buy-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const product = {
+      name: button.getAttribute('data-name'),
+      price: parseFloat(button.getAttribute('data-price')),
+      image: button.getAttribute('data-image')
+    };
+    showBuyNowPopup(product);
+  });
+});
+</script>
+
+
+
+
+        <div class="hair-card">
+        <img src="./assets/human hair1.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/human hair1.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
+        <h4>Stockes</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/human hair2.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/human hair2.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
+        <h4>Stockes</h4>
+        <p>Sleek, shiny, and natural straight hairs.</p>
+      </div>
+        <div class="hair-card">
+        <img src="./assets/human hair3.jpg" alt="Hair 3">
+         <video autoplay muted loop playsinline poster="./assets/human hair3.jpg">
+          <source src="./assets/stock.mp4">
+        </video>
+       
+        <h4>Stockes</h4>
+        <p>Sleek, shiny, and natural straight hair.</p>
+      </div>
+    </div>
+  </section>
+
+
+<div id="custom-alert">
+  <div class="custom-alert-box">
+    <p id="alert-message"></p>
+    <button id="alert-ok-btn">OK</button>
+  </div>
+</div>
+<style>
+#custom-alert {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-alert-box {
+  background: #111;
+  padding: 20px;
+  border-radius: 15px;
+  color: #fff;
+  text-align: center;
+  width: 80%;
+  max-width: 300px;
+  border: 2px solid #f1a887;
+}
+
+#alert-ok-btn {
+  margin-top: 15px;
+  padding: 8px 20px;
+  background: #f1a887;
+  border: none;
+  border-radius: 10px;
+  color: #000;
+  cursor: pointer;
+}
+</style>
+
+
+
+
+<style>
+  @keyframes fadeIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
+
+<script>
+  // ✅ Function to show custom alert
+  function showCustomAlert(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const messageEl = document.getElementById("alert-message");
+    const okBtn = document.getElementById("alert-ok-btn");
+
+    messageEl.textContent = message;
+    alertBox.style.display = "flex";
+
+    // remove old event listener, add new one
+    okBtn.onclick = () => {
+      alertBox.style.display = "none";
+    };
+  }
+</script>
+
+  <!-- CONTACT / FOOTER -->
+  <footer id="contact">
+    <p>Follow us on</p>
+    <div class="social">
+      <a href="https://www.tiktok.com/@newlook2015" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/newlookbeautysalon1216?igsh=YjR2YXlqN3JwMDIw" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://youtube.com/@newlookbeautysalondmv?si=3Wc3wExrGk2Bzwzu" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.facebook.com/share/1GJopNkbd3/" target="_blank"><i class="fab fa-facebook"></i></a>
+    </div>
+    <p>&copy; 2025 New Look Beauty Salon</p>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function(){
+      const header = document.querySelector('header');
+      if(window.scrollY > 50){ header.classList.add('scrolled'); }
+      else{ header.classList.remove('scrolled'); }
+    });
+    
+  </script>
+
+</script>
+
+ 
+<script>
+// After collecting customer info in your Buy Now popup
+const orderData = {
+    type: "single",
+    itemName: product.name,
+    quantity: qty,
+    total: (product.price * qty * 1.05).toFixed(2),
+    deliveryType: deliveryMethod, // pickup or delivery
+    customerName: name,
+    customerPhone: phone,
+    customerAddress: address || "",
+    date: new Date().toISOString()
+};
+
+// Save to Firebase
+db.collection("orders").add(orderData)
+  .then(() => alert("Order sent to admin!"))
+  .catch(err => console.error("Error adding order:", err));
+
+</script>
+
+
+<script>
+  document.querySelectorAll(".hair-card").forEach(card => {
+    const video = card.querySelector("video");
+    if (video) {
+      card.addEventListener("mouseenter", () => video.play());
+      card.addEventListener("mouseleave", () => video.pause());
+    }
+  });
+</script>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('header nav');
+
+  toggle.addEventListener('click', () => {
+    navMenu.classList.toggle('showing');
+    toggle.innerHTML = navMenu.classList.contains('showing')
+      ? '<i class="fas fa-times"></i>'  // show X
+      : '<i class="fas fa-bars"></i>';  // show hamburger
+  });
+
+  // Close menu when clicking a link
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('showing');
+      toggle.innerHTML = '<i class="fas fa-bars"></i>';
+    });
+  });
+</script>
+
+<script>
+// --- Custom Alert Function ---
+ function showCustomAlert(message) {
+    const alertBox = document.getElementById("custom-alert");
+    const messageEl = document.getElementById("alert-message");
+    const okBtn = document.getElementById("alert-ok-btn");
+
+    messageEl.textContent = message;
+    alertBox.style.display = "flex";
+
+    // remove old event listener, add new one
+    okBtn.onclick = () => {
+      alertBox.style.display = "none";
+    };
+  }
+</script>
+
+
+
+<script>
+  
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const count = cart.reduce((sum, item) => sum +(item.quantity || 0), 0); //item.quantity, 0);
+  const el = document.getElementById('cart-count');
+  if (el) el.textContent = count;
+}
+
+function showQuantityPopup(product) {
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    ">
+      <div style="
+        background: black; 
+        color: #f1a887; 
+        padding: 25px; 
+        border-radius: 20px;
+        text-align: center; 
+        width: 90%; 
+        max-width: 400px;
+        box-shadow: 0 0 25px rgba(241,168,135,0.4);
+        animation: fadeIn 0.3s ease;
+      ">
+        <img src="${product.image}" alt="${product.name}" 
+          style="display: block;
+margin: 0 auto 15px;width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+        <h3 style="margin:5px 0; color: #fff;">${product.name}</h3>
+        <h4>How many Bundles do you want?</h4>
+        <p style="color:#ccc;">$${product.price.toFixed(2)} each</p>
+
+        <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:15px 0;">
+          <button id="minus" style="background:#f1a887;color:black;border:none;padding:8px 14px;border-radius:6px;font-size:18px;">−</button>
+          <span id="qty" style="font-size:20px;color:white;">1</span>
+          <button id="plus" style="background:#f1a887;color:black;border:none;padding:8px 14px;border-radius:6px;font-size:18px;">+</button>
+        </div>
+
+        <p id="total" style="color:white;">Total: $${product.price.toFixed(2)}</p>
+
+        <div style="margin-top:12px;">
+          <button id="addToCart" style="background:#f1a887;color:black;border:none;padding:10px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">Add to Cart</button>
+          <button id="close" style="background:transparent;color:#f1a887;border:1px solid #f1a887;padding:8px 14px;border-radius:8px;cursor:pointer;margin-left:8px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  let qty = 1;
+  const qtyEl = popup.querySelector('#qty');
+  const totalEl = popup.querySelector('#total');
+
+  popup.querySelector('#plus').onclick = () => {
+    qty++;
+    qtyEl.textContent = qty;
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  };
+
+  popup.querySelector('#minus').onclick = () => {
+    if (qty > 1) qty--;
+    qtyEl.textContent = qty;
+    totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+  };
+
+  popup.querySelector('#addToCart').onclick = () => {
+   addToCart(product, qty);
+    document.body.removeChild(popup);
+  };
+
+  popup.querySelector('#close').onclick = () => {
+    document.body.removeChild(popup);
+  };
+}
+
+function addToCart(product, quantity) {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingIndex = cart.findIndex(item => item.name === product.name);
+  if (existingIndex !== -1) {
+    // Item already exists → increase quantity and move it to the top
+    cart[existingIndex].quantity += quantity;
+    const updatedItem = cart.splice(existingIndex, 1)[0];
+    cart.unshift(updatedItem); // move to top
+  } else {
+    // New item → add at the top
+     product.quantity = quantity; //new
+    cart.unshift(product);
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+ showCustomAlert(`${product.name} added to your cart!`);
+
+  // Notify other pages (cart.html)
+  window.dispatchEvent(new Event('storage'));
+}
+
+
+
+
+
+
+
+// Attach popup behavior to all buttons with data attributes
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    e.preventDefault(); // stop any form submission or link behavior
+    const product = {
+      name: button.dataset.name,
+      price: parseFloat(button.dataset.price),
+      image: button.dataset.image
+    };
+    showQuantityPopup(product);
+  });
+});
+
+updateCartCount();
+
+/* Attach popup behavior to your add-to-cart buttons.
+   Make sure your buttons have: class="add-to-cart-btn" and data-name, data-price and data-image attributes.
+*/
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('.add-to-cart-btn');
+  if (!btn) return;
+  e.preventDefault();
+
+  const product = {
+    name: btn.dataset.name,
+    price: parseFloat(btn.dataset.price) || 0,
+    image: btn.dataset.image || (btn.closest('.hair-card')?.querySelector('img')?.src || '')
+  };
+  showQuantityPopup(product);
+});
+
+/* init */
+updateCartCount();
+
+
+</script>
+
+
+
+
+
+
+<script>
+
+ 
+  // Helper: get image URL for a product button (safe, encodes spaces)
+  function resolveProductImage(button) {
+    // 1) try data-image attribute
+    let imgPath = button.dataset.image;
+    if (imgPath && imgPath.trim()) {
+      try {
+        // encode spaces/special chars while keeping full URLs intact
+        if (/^https?:\/\//i.test(imgPath)) {
+          return imgPath;
+        } else {
+          // encode each path segment to avoid breaking on spaces
+          const parts = imgPath.split('/').map(p => encodeURIComponent(p));
+          const safePath = parts.join('/').replace(/%3A/gi, ':').replace(/%2F/gi, '/');
+          return new URL(safePath, window.location.origin).href;
+        }
+      } catch (e) {
+        console.warn('resolveProductImage: invalid data-image', imgPath, e);
+      }
+    }
+
+    // 2) fallback: find nearest .hair-card img
+    const card = button.closest('.hair-card');
+    if (card) {
+      const imgEl = card.querySelector('img');
+      if (imgEl && imgEl.getAttribute('src')) {
+        try {
+          return new URL(imgEl.getAttribute('src'), window.location.origin).href;
+        } catch (e) { /* ignore */ }
+      }
+
+      // 3) fallback: if video poster exists
+      const vid = card.querySelector('video[poster]');
+      if (vid && vid.getAttribute('poster')) {
+        try {
+          return new URL(vid.getAttribute('poster'), window.location.origin).href;
+        } catch(e) {}
+      }
+    }
+
+
+    // 4) final fallback: placeholder data URI (transparent)
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect fill="#f3f3f3" width="100%" height="100%"/><text x="50%" y="50%" font-size="16" text-anchor="middle" fill="#bbb" dy=".3em">No image</text></svg>'
+    );
+  }
+
+  
+</script>
+
+
+
+</body>
+</html>

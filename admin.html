@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxrJNOkFpCMP9fwLoi_1V8yTo82LNItOw",
+    authDomain: "new-look-8dee3.firebaseapp.com",
+    projectId: "new-look-8dee3",
+    storageBucket: "new-look-8dee3.firebasestorage.app",
+    messagingSenderId: "1000676019676",
+    appId: "1:1000676019676:web:2cfd3300222b56ee561319",
+    measurementId: "G-JM2LTMY80Y"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(); // Firestore database reference
+</script>
+
+
+
+    <title>Admin Dashboard - Orders</title>
+<style>
+/* ===== Dark Mode (Default) ===== */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    padding: 20px;
+    background: #0e0d0d; 
+    color: #f1a887; 
+    transition: all 0.3s;
+}
+
+h1 { 
+    color: #f1a887; 
+    text-shadow: 0 0 8px rgba(241,168,135,0.4); 
+    margin-bottom: 15px; 
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#searchInput {
+    padding: 12px;
+    width: 260px;
+    border-radius: 10px;
+    border: 1px solid #f1a887;
+    background: #1a1a1a;
+    color: #f1a887;
+    transition: all 0.3s;
+}
+
+#searchInput::placeholder { color: #f1a88788; }
+
+button {
+    padding: 12px 18px;
+    background: transparent;
+    color: #f1a887;
+    border: 2px solid #f1a887;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover { background: #f1a887; color: #0e0d0d; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(241,168,135,0.3);
+    transition: all 0.3s;
+}
+
+th {
+    background: #1c1c1c;
+    color: #f1a887;
+    padding: 15px;
+    border-bottom: 2px solid #f1a88755;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #ffffff15;
+    color: #fff;
+    vertical-align: top;
+}
+
+tr:hover td { background: #f1a88715; transition: 0.3s; }
+
+.tag {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #0e0d0d;
+}
+
+.pickup { background: #c8efc8; }
+.delivery { background: #f7d1a2; }
+
+.delete-btn { background: #b60000; color: white; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s;}
+.delete-btn:hover { background: #ff0000; }
+
+/* ===== Light Mode ===== */
+body.light-mode {
+    background: #fdf6e3;
+    color: #333;
+}
+
+body.light-mode h1 { color: #d99b4b; text-shadow: none; }
+
+body.light-mode #searchInput { background: #fff; border: 1px solid #d99b4b; color: #333; }
+body.light-mode button { color: #d99b4b; border: 2px solid #d99b4b; }
+body.light-mode button:hover { background: #d99b4b; color: #fff; }
+
+body.light-mode table { background: #fff; box-shadow: 0 0 25px rgba(217,155,75,0.3); }
+body.light-mode th { background: #f7f3eb; color: #d99b4b; border-bottom: 2px solid #d99b4b55; }
+body.light-mode td { color: #333; border-bottom: 1px solid #00000015; }
+body.light-mode tr:hover td { background: #ffe9c1; }
+
+body.light-mode .pickup { background: #a5d6a7; color: #333; }
+body.light-mode .delivery { background: #fdd692; color: #333; }
+body.light-mode .delete-btn { background: #b60000; color: #fff; }
+
+
+
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+        .top-bar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        #searchInput { width: 100%; }
+    }
+    @media (max-width: 480px) {
+        table, thead, tbody, th, td, tr { display: block; }
+        tr { margin-bottom: 15px; }
+        th { display: none; }
+        td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+        }
+        td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            flex: 1;
+        }
+        .delete-btn { width: 100%; margin-top: 5px; }
+    }
+</style>
+</head>
+
+<body>
+
+<h1>📦 Admin Order Dashboard</h1>
+
+<div class="top-bar">
+    <input type="text" id="searchInput" placeholder="Search name, phone, email...">
+    <div style="display:flex; gap:10px; align-items:center;">
+        <!-- Light/Dark Mode Icon -->
+        <span id="modeToggle" style="cursor:pointer; font-size:24px;">🌙</span>
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+// Toggle Light/Dark Mode with icon
+const modeToggle = document.getElementById("modeToggle");
+
+function toggleMode() {
+    document.body.classList.toggle("light-mode");
+    // Change icon depending on mode
+    if(document.body.classList.contains("light-mode")) {
+        modeToggle.textContent = "☀️"; // sun for light
+    } else {
+        modeToggle.textContent = "🌙"; // moon for dark
+    }
+}
+
+modeToggle.addEventListener("click", toggleMode);
+</script>
+
+<table id="ordersTable">
+  <thead>
+    <tr>
+      <th onclick="sortByDate()">Date ⬍</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Method</th>
+      <th>Address</th>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Total ($)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="ordersBody"></tbody>
+</table>
+
+<script>
+// Admin check
+if (localStorage.getItem("adminLoggedIn") !== "yes") window.location.href = "admin-login.html";
+
+let orders = [];
+let dateSortDirection = -1;
+
+// Logout
+function logout() {
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "admin-login.html";
+}
+
+// Toggle Light/Dark
+function toggleMode() {
+    document.body.classList.toggle("light-mode");
+}
+
+// Render orders
+function renderOrders(list = orders) {
+    const tbody = document.getElementById("ordersBody");
+    tbody.innerHTML = "";
+    list.forEach(order =>{
+        const deliveryTag = order.deliveryType ? 
+            `<span class="tag ${order.deliveryType==='pickup'?'pickup':'delivery'}">${order.deliveryType}</span>` : "-";
+
+        const itemsHTML = order.type==='cart' ? 
+            order.items.map(i=>`${i.name} (x${i.quantity})`).join("<br>") :
+            `${order.itemName} (x${order.quantity})`;
+
+        const totalQty = order.type==='cart' ? 
+            order.items.reduce((sum,i)=>sum+i.quantity,0) : order.quantity;
+
+        tbody.innerHTML += `<tr>
+            <td>${new Date(order.date).toLocaleString()}</td>
+            <td>${order.customerName||"-"}</td>
+            <td>${order.customerPhone||"-"}</td>
+            <td>${deliveryTag}</td>
+            <td>${order.customerAddress||"-"}</td>
+            <td>${itemsHTML}</td>
+            <td>${totalQty}</td>
+            <td>${order.total.toFixed(2)}</td>
+            <td><button class="delete-btn" onclick="deleteOrder(${index})">Delete</button></td>
+        </tr>`;
+    });
+}
+
+// --- Delete order ---
+function deleteOrder(orderId) {
+    if(confirm("Delete this order?")){
+        db.collection("orders").doc(orderId).delete()
+          .then(() => console.log("Order deleted"))
+          .catch(err => console.error(err));
+    }
+}
+
+// Sort by date
+function sortByDate() {
+    orders.sort((a,b)=>dateSortDirection*(new Date(a.date)-new Date(b.date)));
+    dateSortDirection*=-1;
+    renderOrders();
+}
+
+// Search
+document.getElementById("searchInput").addEventListener("input",function(){
+    const q=this.value.toLowerCase();
+    const filtered = orders.filter(o=>
+        (o.customerName||"").toLowerCase().includes(q) ||
+        (o.customerPhone||"").toLowerCase().includes(q) ||
+        (o.payerEmail||"").toLowerCase().includes(q)
+    );
+    renderOrders(filtered);
+});
+
+
+// --- Fetch orders from Firebase in real-time ---
+db.collection("orders").orderBy("date", "desc")
+  .onSnapshot(snapshot => {
+      orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderOrders();
+  });
+</script>
+
+</body>
+</html>
