@@ -8,14 +8,14 @@
 
 <script>
   // Your Firebase config
+   // Your web app's Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyBxrJNOkFpCMP9fwLoi_1V8yTo82LNItOw",
-    authDomain: "new-look-8dee3.firebaseapp.com",
-    projectId: "new-look-8dee3",
-    storageBucket: "new-look-8dee3.firebasestorage.app",
-    messagingSenderId: "1000676019676",
-    appId: "1:1000676019676:web:2cfd3300222b56ee561319",
-    measurementId: "G-JM2LTMY80Y"
+    apiKey: "AIzaSyAeo2ry4ZoTdsS3GUCbzhn-mcJ4LZSDCaM",
+    authDomain: "new-look-61e6a.firebaseapp.com",
+    projectId: "new-look-61e6a",
+    storageBucket: "new-look-61e6a.firebasestorage.app",
+    messagingSenderId: "301307363622",
+    appId: "1:301307363622:web:6e2a11445b37975523c1e7"
   };
 
   // Initialize Firebase
@@ -39,6 +39,26 @@
 html {
   scroll-behavior: smooth;
 }
+
+
+:root {
+  --bg: #000;
+  --text: #f1a887;
+  --card-bg: #111;
+  --shadow: rgba(255, 215, 0, 0.3);
+  --btn-bg: #f1a887;
+  --btn-text: black;
+}
+
+.light-mode {
+  --bg: #ffffff;
+  --text: #222;
+  --card-bg: #f7f7f7;
+  --shadow: rgba(0, 0, 0, 0.2);
+  --btn-bg: #222;
+  --btn-text: white;
+}
+
 
     /* ==== HEADER ==== */
     header {
@@ -82,7 +102,7 @@ html {
 .menu-toggle {
   display: none;
   font-size: 1.8rem;
-  color: #e19775;
+  color: var(--text);
  cursor: pointer;
   margin-left: auto;
   z-index: 1001; /* above menu */
@@ -97,7 +117,7 @@ html {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   margin-bottom: 40px;
-  color: #f1a887;  /* golden color */
+  color: var(--text);  /* golden color */
   text-align: center;  /* centered */
 }
 
@@ -696,12 +716,14 @@ html {
 <!-- Include PayPal SDK in your HTML head -->
 
 
-<script src="https://www.paypal.com/sdk/js?client-id=AfjDnf0myNVrrDAe4cUipst1BOt8o_Nz-j3YEdbOvmPFUqvN9UxEVJy1rsYzBfrTRLdy4TdSWEbGpqXl&currency=USD&enable-funding=card,venmo,applepay"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AVx-la8bgyXQw2TjE0mjGFTA9-kIFhzaMZLk-7sD-18MIpS9Zi2HMzGYHgomi1iqL38JBO2vt41MwHL4&currency=USD&enable-funding=card,venmo,applepay"></script>
 
 <script>
 function showBuyNowPopup(product) {
   // Create popup container
   const popup = document.createElement('div');
+  //new 
+   popup.classList.add('popup');
   popup.innerHTML = `
     <style>
     input[name="delivery"] {
@@ -770,10 +792,15 @@ function showBuyNowPopup(product) {
   const qtyEl = popup.querySelector('#qty');
   const totalEl = popup.querySelector('#total');
   const addressEl = popup.querySelector('#address');
-
+/**
   function updateTotal() {
     totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
   }
+**/
+//new for above
+
+  const updateTotal = () => totalEl.textContent = `Total: $${(product.price * qty).toFixed(2)}`;
+
 
   // Quantity buttons
   popup.querySelector('#plus').onclick = () => { qty++; qtyEl.textContent = qty; updateTotal(); renderPayPalButton(); };
@@ -824,26 +851,27 @@ function showBuyNowPopup(product) {
       },
 
 //saving it for the admin 
-
+/**
      onApprove: function(data, actions) {
   return actions.order.capture().then(function(details) {
 
     // 1️⃣ Collect selected user info
-    const deliveryType = document.querySelector('input[name="delivery-method"]:checked').value;
-    const customerName = document.getElementById('customerName').value;
-    const customerPhone = document.getElementById('customerPhone').value;
-    const customerAddress = document.getElementById('customerAddress')?.value || "Pickup";
+     const deliveryType = popup.querySelector('input[name="delivery"]:checked').value;
+    const customerName = popup.querySelector('#name').value.trim();
+    const customerPhone = popup.querySelector('#phone').value.trim();
+    const customerAddress = popup.querySelector('#address').value.trim() || "Pickup";
 
     // 2️⃣ Product details (you already have itemName, itemPrice, quantity)
     const orderData = {
+      type: "single",
+      itemName: product.name,
+      itemPrice: product.price,
+      quantity: qty,
+      total: (product.price * qty * 1.05).toFixed(2),
       deliveryType,
       customerName,
       customerPhone,
       customerAddress,
-      itemName,
-      itemPrice,
-      quantity,
-      total: (itemPrice * quantity).toFixed(2),
       paymentID: details.id,
       payerEmail: details.payer.email_address,
       date: new Date().toISOString()
@@ -855,21 +883,64 @@ function showBuyNowPopup(product) {
    // localStorage.setItem("orders", JSON.stringify(orders));
 
    // Save order to Firebase
-db.collection("orders").add(orderData)
-  .then(() => {
-    alert("Payment Successful! Your order has been sent to admin ❤️");
-  })
-  .catch(err => {
-    console.error("Error saving order:", err);
-    alert("Something went wrong. Try again.");
+   // 🔥 Save to Firebase
+   
+
+   db.collection("orders")
+      .add(orderData)
+      .then(() => {
+        showCustomAlert("🎉 Payment Successful! Your order has been sent to the admin.");
+      })
+      .catch(err => {
+        console.error("Firebase error:", err);
+        showCustomAlert("❌ Payment captured, but order could not be saved.");
+      });
+
+
+    
   });
+}
 
+*/
+onApprove: function(data, actions) {
+  return actions.order.capture().then(function(details) {
 
-    // 4️⃣ Success popup
-    alert("Payment Successful! Thank you for your order ❤️");
+    const deliveryType = popup.querySelector('input[name="delivery"]:checked').value;
+    const customerName = popup.querySelector('#name').value.trim();
+    const customerPhone = popup.querySelector('#phone').value.trim();
+    const customerAddress = popup.querySelector('#address').value.trim() || "Pickup";
+
+    const orderData = {
+      type: "single",
+      itemName: product.name,
+      itemPrice: product.price,
+      quantity: qty,
+      total: (product.price * qty * 1.05).toFixed(2),
+      deliveryType,
+      customerName,
+      customerPhone,
+      customerAddress,
+      paymentID: details.id,
+      payerEmail: details.payer.email_address,
+      date: new Date().toISOString()
+    };
+
+    // SAVE TO FIREBASE
+    db.collection("orders")
+      .add(orderData)
+      .then(() => {
+        showCustomAlert("🎉 Payment Successful! Order sent to admin.");
+        document.body.removeChild(popup);
+      })
+      .catch(err => {
+        console.error("Firebase error:", err);
+        showCustomAlert("❌ Payment OK but failed to save order.");
+      });
 
   });
 }
+
+
 
     }).render(container);
   }
@@ -890,6 +961,24 @@ document.querySelectorAll('.buy-btn').forEach(button => {
 });
 </script>
 
+
+<div class="custom-alert" id="transactionAlert">
+  <div class="alert-box">
+    Transaction successful!
+    <br><br>
+    <button onclick="closeTransactionAlert()">OK</button>
+  </div>
+</div>
+
+<script>
+function showTransactionAlert() {
+    document.getElementById("transactionAlert").style.display = "flex";
+}
+
+function closeTransactionAlert() {
+    document.getElementById("transactionAlert").style.display = "none";
+}
+</script>
 
 
 
@@ -1017,7 +1106,7 @@ document.querySelectorAll('.buy-btn').forEach(button => {
 
 </script>
 
- 
+<!--
 <script>
 // After collecting customer info in your Buy Now popup
 const orderData = {
@@ -1038,7 +1127,7 @@ db.collection("orders").add(orderData)
   .catch(err => console.error("Error adding order:", err));
 
 </script>
-
+-->
 
 <script>
   document.querySelectorAll(".hair-card").forEach(card => {
@@ -1075,23 +1164,6 @@ db.collection("orders").add(orderData)
       toggle.innerHTML = '<i class="fas fa-bars"></i>';
     });
   });
-</script>
-
-<script>
-// --- Custom Alert Function ---
- function showCustomAlert(message) {
-    const alertBox = document.getElementById("custom-alert");
-    const messageEl = document.getElementById("alert-message");
-    const okBtn = document.getElementById("alert-ok-btn");
-
-    messageEl.textContent = message;
-    alertBox.style.display = "flex";
-
-    // remove old event listener, add new one
-    okBtn.onclick = () => {
-      alertBox.style.display = "none";
-    };
-  }
 </script>
 
 

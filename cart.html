@@ -7,11 +7,29 @@
   <title>Your Cart | New Look</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    :root {
+  --bg: #000;
+  --text: #f1a887;
+  --card-bg: #111;
+  --shadow: rgba(255, 215, 0, 0.3);
+  --btn-bg: #f1a887;
+  --btn-text: black;
+}
+
+.light-mode {
+  --bg: rgba(255,248,240,0.95);
+  --text: #222;
+  --card-bg: #f7f7f7;
+  --shadow: rgba(0, 0, 0, 0.2);
+  --btn-bg: #222;
+  --btn-text: white;
+}
+
     /* ===== Base Styles ===== */
     body {
       font-family: "Poppins", sans-serif;
-      background-color: #000;
-      color: #f1a887;
+      background-color: var(--bg);
+      color: var(--text);
       margin: 0;
       padding: 15px;
       min-height: 100vh;
@@ -23,7 +41,7 @@
       text-align: center;
       margin: 60px 0 20px;
       font-size: 28px;
-      color: #f1a887;
+      color: var(--text);
     }
 
     /* ===== Back to Shop Button (Top Left Corner) ===== */
@@ -51,11 +69,11 @@
     .cart-item {
       display: flex;
       align-items: center;
-      background: #111;
+      background:var(--card-bg);
       padding: 15px;
       border-radius: 15px;
       margin-bottom: 15px;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      box-shadow:  0 0 10px var(--shadow);
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 15px;
@@ -70,7 +88,7 @@
 
     .cart-details {
       flex: 1;
-      color: white;
+      color:  var(--text);
       min-width: 200px;
     }
 
@@ -146,7 +164,7 @@
       margin-top: 25px;
       font-size: 22px;
       font-weight: bold;
-      color: white;
+      color:  var(--text);
     }
 
     .checkout-btn {
@@ -169,57 +187,6 @@
       background: #c77f5d;
     }
 
-    /* ===== Responsive Design ===== */
-   
-   /*
-    @media (max-width: 768px) {
-      .cart-item {
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
-      }
-
-      .cart-actions {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .cart-item img {
-        width: 120px;
-        height: 120px;
-      }
-
-      h2 {
-        font-size: 24px;
-        margin-top: 70px;
-      }
-
-      .quantity-controls button {
-        padding: 5px 10px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .cart-item {
-        padding: 12px;
-      }
-
-      .cart-details h4 {
-        font-size: 16px;
-      }
-
-      .checkout-btn {
-        width: 90%;
-        height: 60%;
-      }
-
-      .back-btn {
-        font-size: 13px;
-        padding: 8px 14px;
-      }
-    }
-*/
 
 
     /* ===== RESPONSIVE DESIGN ===== */
@@ -318,6 +285,22 @@
 </head>
 <body>
     <a href="shop.html" class="back-btn">⬅ Back to Shop</a>
+    <button id="mode-toggle" 
+  style="
+    position: fixed;
+    top: 15px; 
+    right: 15px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    cursor: pointer;
+    z-index: 2000;
+  ">
+  🌙 Dark Mode
+</button>
+
 
   <h2>🛍️ Your Cart</h2>
   <div id="cart-items"></div>
@@ -335,83 +318,92 @@
 
 <script>
   // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBxrJNOkFpCMP9fwLoi_1V8yTo82LNItOw",
-    authDomain: "new-look-8dee3.firebaseapp.com",
-    projectId: "new-look-8dee3",
-    storageBucket: "new-look-8dee3.appspot.com",
-    messagingSenderId: "1000676019676",
-    appId: "1:1000676019676:web:2cfd3300222b56ee561319",
-    measurementId: "G-JM2LTMY80Y"
+    const firebaseConfig = {
+    apiKey: "AIzaSyAeo2ry4ZoTdsS3GUCbzhn-mcJ4LZSDCaM",
+    authDomain: "new-look-61e6a.firebaseapp.com",
+    projectId: "new-look-61e6a",
+    storageBucket: "new-look-61e6a.firebasestorage.app",
+    messagingSenderId: "301307363622",
+    appId: "1:301307363622:web:6e2a11445b37975523c1e7"
   };
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
 
 
-
 <script>
+// GLOBAL cart array
+
+
+// Function to show alerts
+function showAlert(message) {
+  alert(message); // Replace with your custom alert if needed
+}
+
+// Checkout button click
 document.getElementById("checkout-btn").addEventListener("click", function(e) {
   e.preventDefault();
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   if (cart.length === 0) {
-    alert("Your cart is empty!");
+    showAlert("Your cart is empty!");
     return;
   }
 
-  // Calculate subtotal and total with tax
+  // Calculate totals
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.05;
   const totalWithTax = subtotal + tax;
-
-  // Prepare cart description
   const cartDescription = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
 
   // Create popup
-  const popup = document.createElement('div');
+  const popup = document.createElement("div");
   popup.innerHTML = `
-    <div style="
+   <div style="
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
       background: rgba(0,0,0,0.75);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+      padding: 10px;
+      box-sizing: border-box;
+  ">
+    <div style="
+        background:#111;
+        color:#f1a887;
+        padding:20px;
+        border-radius:20px;
+        width:100%;
+        max-width:400px;
+        max-height:90vh;
+        overflow-y:auto;
+        text-align:center;
+        box-sizing:border-box;
     ">
-      <div style="
-        background: #111; 
-        color: #f1a887; 
-        padding: 25px; 
-        border-radius: 20px;
-        text-align: center; 
-        width: 90%; max-width: 400px;
-        max-height: 90vh; overflow-y: auto;
-        box-shadow: 0 0 25px rgba(241,168,135,0.5);
-      ">
-        <h3 style="margin-bottom:10px;">Your Cart</h3>
+      <h3 style="margin-top:0;">Your Cart</h3>
         <div id="cart-items-popup" style="text-align:left; margin-bottom:15px;">
-          ${cart.map(item =>`
-          <div style="
-            display: flex; 
-            align-items: center; 
-            background: #1a1a1a; 
-            margin-bottom: 10px; 
-            padding: 10px; 
-            border-radius: 10px;
-          ">
-              
-            <div style="flex:1;">
-              <p style="margin:0; font-weight:bold; color:#f1a887;">${item.name}</p>
-              <p style="margin:2px 0; font-size:14px; color:#ccc;">Qty: ${item.quantity} | $${(item.price*item.quantity).toFixed(2)}</p>
+          ${cart.map(item => `
+            <div style="
+              display:flex; align-items:center; background:#1a1a1a; 
+              margin-bottom:10px; padding:10px; border-radius:10px;">
+              <div style="flex:1;">
+                <p style="margin:0; font-weight:bold;">${item.name}</p>
+                <p style="margin:2px 0; font-size:14px; color:#ccc;">
+                  Qty: ${item.quantity} | $${(item.price*item.quantity).toFixed(2)}
+                </p>
+              </div>
             </div>
-          </div>
-        `).join('')}
-      </div>
-       
-        <p style="margin:10px 0; font-size:18px;">Subtotal: $${subtotal.toFixed(2)}</p>
-        <p style="margin:10px 0; font-size:18px;">Tax (5%): $${tax.toFixed(2)}</p>
-        <p style="margin:10px 0; font-size:20px; font-weight:bold;">Total: $${totalWithTax.toFixed(2)}</p>
+          `).join('')}
+        </div>
+
+        <p>Subtotal: $${subtotal.toFixed(2)}</p>
+        <p>Tax (5%): $${tax.toFixed(2)}</p>
+        <p style="font-weight:bold;">Total: $${totalWithTax.toFixed(2)}</p>
 
         <div style="margin:15px 0; text-align:left;">
           <label><input type="radio" name="delivery_cart" value="pickup" checked> Pickup</label>
@@ -426,38 +418,40 @@ document.getElementById("checkout-btn").addEventListener("click", function(e) {
 
         <div id="paypal-button-container-cart" style="margin-top:10px;"></div>
 
-        <button id="close_cart" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
+        <button id="close_cart" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">
+          Cancel
+        </button>
       </div>
     </div>
   `;
   document.body.appendChild(popup);
 
-  const addressEl = popup.querySelector('#address_cart');
+  const addressEl = popup.querySelector("#address_cart");
 
-  // Show/hide address if delivery selected
+  // Show/hide address input
   popup.querySelectorAll('input[name="delivery_cart"]').forEach(radio => {
     radio.onchange = () => {
-      if (radio.value === 'delivery') addressEl.style.display = 'block';
-      else addressEl.style.display = 'none';
+      addressEl.style.display = radio.value === "delivery" ? "block" : "none";
     };
   });
 
-  // Close button
-  popup.querySelector('#close_cart').onclick = () => {
+  // Close popup
+  popup.querySelector("#close_cart").onclick = () => {
     document.body.removeChild(popup);
   };
 
   // Render PayPal button
   paypal.Buttons({
     style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+
     createOrder: function(data, actions) {
       const name = popup.querySelector('#name_cart').value.trim();
       const phone = popup.querySelector('#phone_cart').value.trim();
       const deliveryMethod = popup.querySelector('input[name="delivery_cart"]:checked').value;
       const address = popup.querySelector('#address_cart').value.trim();
 
-      if(!name || !phone || (deliveryMethod==='delivery' && !address)) {
-        alert('Please fill in all required fields.');
+      if (!name || !phone || (deliveryMethod === "delivery" && !address)) {
+        showAlert("Please fill in all required fields.");
         return;
       }
 
@@ -468,21 +462,17 @@ document.getElementById("checkout-btn").addEventListener("click", function(e) {
         }]
       });
     },
+
     onApprove: function(data, actions) {
-       return actions.order.capture().then(function(details) {
+      return actions.order.capture().then(function(details) {
         const name = popup.querySelector('#name_cart').value.trim();
         const phone = popup.querySelector('#phone_cart').value.trim();
         const deliveryMethod = popup.querySelector('input[name="delivery_cart"]:checked').value;
         const address = popup.querySelector('#address_cart').value.trim();
 
-        // Save order to Firestore
         const orderData = {
           type: "cart",
-          items: cart.map(item => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-          })),
+          items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
           total: totalWithTax.toFixed(2),
           deliveryType: deliveryMethod,
           customerName: name,
@@ -491,21 +481,34 @@ document.getElementById("checkout-btn").addEventListener("click", function(e) {
           date: new Date().toISOString()
         };
 
+        // Save to Firestore
         db.collection("orders").add(orderData)
-          .then(() => console.log("Cart order saved to Firestore!"))
-          .catch(err => console.error("Firestore error:", err));
+          .then(() => {
+            console.log("Cart order saved!");
 
-        alert(`Transaction completed by ${details.payer.name.given_name}`);
-        document.body.removeChild(popup);
-        localStorage.removeItem('cart'); // empty cart after payment
-        renderCart(); // re-render empty cart
+            // CLEAR CART
+            cart.length = 0;                  // clear global cart
+            localStorage.removeItem("cart");  // clear localStorage
+            if (typeof renderCart === "function") renderCart(); // update UI
+            window.dispatchEvent(new Event("storage")); // notify other tabs
+
+            showAlert(`Transaction completed by ${details.payer.name.given_name}`);
+            if (popup && popup.parentNode) document.body.removeChild(popup);
+          })
+          .catch(err => {
+            console.error("Firestore error:", err);
+            showAlert("Order save failed — payment succeeded. Please contact admin.");
+          });
       });
     }
-  }).render(popup.querySelector('#paypal-button-container-cart'));
+
+  }).render(popup.querySelector("#paypal-button-container-cart"));
 });
 </script>
 
-<script src="https://www.paypal.com/sdk/js?client-id=AfjDnf0myNVrrDAe4cUipst1BOt8o_Nz-j3YEdbOvmPFUqvN9UxEVJy1rsYzBfrTRLdy4TdSWEbGpqXl&currency=USD&enable-funding=card,venmo,applepay"></script>
+
+
+<script src="https://www.paypal.com/sdk/js?client-id=AVx-la8bgyXQw2TjE0mjGFTA9-kIFhzaMZLk-7sD-18MIpS9Zi2HMzGYHgomi1iqL38JBO2vt41MwHL4&currency=USD&enable-funding=card,venmo,applepay"></script>
 
 <script>
   function showBuyNowPopup(product) {
@@ -616,7 +619,7 @@ document.getElementById("checkout-btn").addEventListener("click", function(e) {
         const address = popup.querySelector('#address').value.trim();
 
         if(!name || !phone || (deliveryMethod==='delivery' && !address)) {
-          alert('Please fill in all required fields.');
+          showAlert('Please fill in all required fields.');
           return;
         }
 
@@ -634,25 +637,53 @@ document.getElementById("checkout-btn").addEventListener("click", function(e) {
           }]
         });
       },
+      /**
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert(`Transaction completed by ${details.payer.name.given_name}`);
+          showAlert(`Transaction completed by ${details.payer.name.given_name}`);
           document.body.removeChild(popup);
         });
       }
+        **/
+       onApprove: function(data, actions) {
+  return actions.order.capture().then(function(details) {
+    // Save single product order to Firestore after capture
+    const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
+    const orderData = {
+      type: "single",
+      itemName: product.name,
+      quantity: qty,
+      total: (product.price * qty * 1.05).toFixed(2),
+      deliveryType: deliveryMethod,
+      customerName: popup.querySelector('#name').value.trim(),
+      customerPhone: popup.querySelector('#phone').value.trim(),
+      customerAddress: popup.querySelector('#address').value.trim() || "",
+      payerEmail: details?.payer?.email_address || "",
+      paymentID: details?.id || "",
+      date: new Date().toISOString()
+    };
+
+    db.collection("orders").add(orderData)
+      .then(() => console.log("Buy Now order saved"))
+      .catch(err => console.error("Error saving Buy Now order:", err));
+
+    showAlert(`Transaction completed by ${details.payer.name.given_name}`);
+    document.body.removeChild(popup);
+  });
+}
+
     }).render(container);
   }
 
   renderPayPalButton(); // initial render
 }
 
-
 function showCartItemBuyNowPopup(item, index) {
+  // Create popup
   const popup = document.createElement('div');
   popup.innerHTML = `
     <div style="
-      position: fixed;
-      top:0; left:0;
+      position: fixed; top:0; left:0;
       width:100%; height:100%;
       background: rgba(0,0,0,0.75);
       display: flex; justify-content: center; align-items: center;
@@ -687,13 +718,14 @@ function showCartItemBuyNowPopup(item, index) {
           <input type="text" id="address" placeholder="Delivery Address" style="width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:none; display:none;">
         </div>
 
-        <div id="paypal-button-container"></div>
+        <div id="paypal-button-container" style="margin-top:10px;"></div>
         <button id="close" style="margin-top:15px; padding:10px 20px; border-radius:8px; border:2px solid #f1a887; background:transparent; color:#f1a887; cursor:pointer;">Cancel</button>
       </div>
     </div>
   `;
   document.body.appendChild(popup);
 
+  // Quantity & total elements
   let qty = item.quantity;
   const qtyEl = popup.querySelector('#qty');
   const totalEl = popup.querySelector('#total');
@@ -704,57 +736,81 @@ function showCartItemBuyNowPopup(item, index) {
   popup.querySelector('#plus').onclick = () => { qty++; qtyEl.textContent = qty; updateTotal(); renderPayPal(); };
   popup.querySelector('#minus').onclick = () => { if(qty>1){ qty--; qtyEl.textContent = qty; updateTotal(); renderPayPal(); }};
 
-  popup.querySelectorAll('input[name="delivery"]').forEach(radio=>{
-    radio.onchange = () => { addressEl.style.display = radio.value==='delivery' ? 'block' : 'none'; };
+  popup.querySelectorAll('input[name="delivery"]').forEach(radio => {
+    radio.onchange = () => { addressEl.style.display = radio.value==='delivery' ? 'block' : 'none'; renderPayPal(); };
   });
 
   popup.querySelector('#close').onclick = () => document.body.removeChild(popup);
 
+  // PayPal render
   function renderPayPal() {
     const container = popup.querySelector('#paypal-button-container');
     container.innerHTML = '';
+
     paypal.Buttons({
       createOrder: function(data, actions) {
         const name = popup.querySelector('#name').value.trim();
         const phone = popup.querySelector('#phone').value.trim();
         const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
         const address = popup.querySelector('#address').value.trim();
-        if(!name || !phone || (deliveryMethod==='delivery' && !address)) { alert('Fill all fields!'); return; }
+        if (!name || !phone || (deliveryMethod==='delivery' && !address)) {
+          showAlert('Fill all fields!');
+          return;
+        }
 
-        // Send order to Firebase
-        const orderData = {
-          type: 'cart-single',
-          itemName: item.name,
-          quantity: qty,
-          total: (item.price * qty * 1.05).toFixed(2),
-          deliveryType: deliveryMethod,
-          customerName: name,
-          customerPhone: phone,
-          customerAddress: address || '',
-          date: new Date().toISOString()
-        };
-        db.collection("orders").add(orderData)
-          .then(()=>console.log("Cart item order saved"))
-          .catch(err=>console.error(err));
+        const totalWithTax = (item.price * qty * 1.05).toFixed(2); // 5% tax
 
         return actions.order.create({
-          purchase_units:[{ amount:{ value:(item.price*qty*1.05).toFixed(2) }, description:`${item.name} x ${qty} (${deliveryMethod.toUpperCase()})` }]
+          purchase_units: [{
+            amount: { value: totalWithTax },
+            description: `${item.name} x ${qty} (${deliveryMethod.toUpperCase()})`
+          }]
         });
       },
-      onApprove: function(data, actions){
-        return actions.order.capture().then(function(details){
-          alert(`Transaction completed by ${details.payer.name.given_name}`);
-          document.body.removeChild(popup);
-          cart.splice(index,1); // remove item from cart after Buy Now
+
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          const name = popup.querySelector('#name').value.trim();
+          const phone = popup.querySelector('#phone').value.trim();
+          const deliveryMethod = popup.querySelector('input[name="delivery"]:checked').value;
+          const address = popup.querySelector('#address').value.trim();
+          const totalWithTax = (item.price * qty * 1.05).toFixed(2);
+
+          // Save to Firestore
+          db.collection("orders").add({
+            type: "single",
+            itemName: item.name,
+            quantity: qty,
+            total: totalWithTax,
+            deliveryType: deliveryMethod,
+            customerName: name,
+            customerPhone: phone,
+            customerAddress: address || "",
+            payerEmail: details?.payer?.email_address || "",
+            paymentID: details?.id || "",
+            date: new Date().toISOString()
+          })
+          .then(() => console.log("Buy Now order saved"))
+          .catch(err => console.error(err));
+
+          showAlert(`Transaction completed by ${details.payer.name.given_name}`);
+
+          // Remove item from cart
+          cart.splice(index, 1);
           localStorage.setItem('cart', JSON.stringify(cart));
           renderCart();
+
+          // Remove popup
+          if (popup.parentNode) document.body.removeChild(popup);
         });
       }
+
     }).render(container);
   }
 
   renderPayPal();
 }
+
 
 function attachBuyNowPopup() {
   document.querySelectorAll('.buy-btn').forEach(button => {
@@ -773,6 +829,7 @@ function attachBuyNowPopup() {
 
 
 </script>
+
 
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -869,6 +926,69 @@ window.addEventListener('storage', (e) => {
 
 /* initial render */
 renderCart();
+</script>
+
+
+<!-- Custom Alert -->
+<div id="custom-alert" style="
+      display:none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.75);
+    justify-content:center; align-items:center;
+    z-index:99999;
+">
+    <div style="
+        background:#111; color:#f1a887; padding:20px 25px; 
+        border-radius:15px; text-align:center; max-width:350px;
+        box-shadow:0 0 20px rgba(241,168,135,0.5);
+    ">
+        <p id="custom-alert-msg" style="margin-bottom:15px;"></p>
+        <button id="custom-alert-ok" style="
+            padding:8px 18px; border:none; border-radius:8px;
+            background:#f1a887; color:black; font-weight:bold;
+            cursor:pointer;
+        ">OK</button>
+    </div>
+</div>
+
+<script>
+  function showAlert(message) {
+    const alertBox = document.getElementById('custom-alert');
+    const alertMsg = document.getElementById('custom-alert-msg');
+    const alertOk = document.getElementById('custom-alert-ok');
+
+    alertMsg.textContent = message;
+    alertBox.style.display = 'flex';
+
+    alertOk.onclick = () => {
+        alertBox.style.display = 'none';
+    };
+}
+
+</script>
+<script>
+  const modeBtn = document.getElementById("mode-toggle");
+
+  // Load saved mode
+  if (localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light-mode");
+    modeBtn.textContent = "☀️ Light Mode";
+  }
+
+  modeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+
+    // Save setting
+    if (document.body.classList.contains("light-mode")) {
+      localStorage.setItem("theme", "light");
+      modeBtn.textContent = "☀️ Light Mode";
+    } else {
+      localStorage.removeItem("theme");
+      modeBtn.textContent = "🌙 Dark Mode";
+    }
+  });
 </script>
 
 
