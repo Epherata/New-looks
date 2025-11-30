@@ -1,10 +1,12 @@
 {
-  "builds": [
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "assets/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/admin", "dest": "/admin/index.html" },
-    { "src": "/(.*)", "dest": "/$1" }
-  ]
+"builds": [
+{ "src": "*.html", "use": "@vercel/static" },
+{ "src": "admin/*.html", "use": "@vercel/static" },
+{ "src": "assets/**", "use": "@vercel/static" }
+],
+"routes": [
+{ "src": "/admin", "dest": "/admin/index.html" },
+{ "src": "/(.*)/$", "dest": "/$1/index.html" },
+{ "src": "/(.*)", "dest": "/$1" }
+]
 }
