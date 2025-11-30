@@ -4,6 +4,7 @@
     { "src": "assets/**", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/admin", "dest": "/admin/index.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
